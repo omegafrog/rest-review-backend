@@ -1,12 +1,15 @@
 package org.example.sbb.app.domain.question;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.answer.AnswerService;
+import org.example.sbb.app.domain.dto.QuestionForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,13 +39,16 @@ public class QuestionController {
     }
 
     @GetMapping("/write")
-    public String writeQuestionPage() {
+    public String writeQuestionPage(@ModelAttribute(name="form") QuestionForm form) {
         return "question/question_write";
     }
 
     @PostMapping("/write")
-    public String writeQuestion(@RequestParam(name = "subject") String subject, @RequestParam(name = "content") String content) {
-        service.writeQuestion(subject, content);
+    public String writeQuestion(@Valid QuestionForm form, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "question/question_write";
+        }
+        service.writeQuestion(form.getSubject(), form.getContent());
         return "redirect:write/confirm";
     }
     @GetMapping("/write/confirm")
