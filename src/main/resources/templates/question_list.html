@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question list</title>
+</head>
+<body>
+    <table >
+        <thead >
+            <tr >
+                <th>제목</th>
+                <th>내용</th>
+                <th>생성일자</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="question : ${list}">
+                <td th:text="${question.getSubject()}"></td>
+                <td th:text="${question.getContent()}"></td>
+                <td th:text="${question.getCreatedAt()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
