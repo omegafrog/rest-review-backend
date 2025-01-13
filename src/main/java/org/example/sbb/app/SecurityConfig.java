@@ -1,4 +1,4 @@
-package org.example.sbb.common;
+package org.example.sbb.app.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
