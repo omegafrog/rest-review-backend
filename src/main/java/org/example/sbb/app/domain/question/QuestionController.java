@@ -2,14 +2,12 @@ package org.example.sbb.app.domain.question;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.AnswerDto;
-import org.example.sbb.app.QuestionDto;
+import org.example.sbb.app.domain.dto.AnswerDto;
+import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.answer.AnswerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +33,21 @@ public class QuestionController {
         model.addAttribute("question", dto);
         model.addAttribute("answers", all);
         return "question/question_info";
+    }
+
+    @GetMapping("/write")
+    public String writeQuestionPage() {
+        return "question/question_write";
+    }
+
+    @PostMapping("/write")
+    public String writeQuestion(@RequestParam(name = "subject") String subject, @RequestParam(name = "content") String content) {
+        service.writeQuestion(subject, content);
+        return "redirect:write/confirm";
+    }
+    @GetMapping("/write/confirm")
+    public String writeConfirmPage() {
+       return "question/write_confirm";
     }
 }
 

@@ -20,7 +20,8 @@ public class SecurityConfig{
         http
                 .securityMatcher("/sbb/questions/**")
                 .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.anyRequest().permitAll());
+                        authorizeRequests.anyRequest().permitAll())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         return http.build();
     }
 

@@ -1,4 +1,4 @@
-package org.example.sbb.app;
+package org.example.sbb.app.domain.dto;
 
 import org.example.sbb.app.domain.answer.Answer;
 

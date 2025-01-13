@@ -3,7 +3,7 @@ package org.example.sbb.app.domain.answer;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.AnswerDto;
+import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.question.QuestionH2Repository;
 import org.springframework.stereotype.Service;
