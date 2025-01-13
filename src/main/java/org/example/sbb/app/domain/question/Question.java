@@ -3,8 +3,7 @@ package org.example.sbb.app.domain.question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.sbb.app.entity.Answer;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.example.sbb.app.domain.answer.Answer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

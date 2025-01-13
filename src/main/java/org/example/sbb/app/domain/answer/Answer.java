@@ -1,4 +1,4 @@
-package org.example.sbb.app.entity;
+package org.example.sbb.app.domain.answer;
 
 import jakarta.persistence.*;
 import lombok.Getter;

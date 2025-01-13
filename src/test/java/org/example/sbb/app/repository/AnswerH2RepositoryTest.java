@@ -1,8 +1,9 @@
 package org.example.sbb.app.repository;
 
 import org.assertj.core.api.Assertions;
+import org.example.sbb.app.domain.answer.AnswerH2Repository;
 import org.example.sbb.app.domain.question.QuestionH2Repository;
-import org.example.sbb.app.entity.Answer;
+import org.example.sbb.app.domain.answer.Answer;
 import org.example.sbb.app.domain.question.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

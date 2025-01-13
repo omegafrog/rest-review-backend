@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${question.subject()}"></title>
+</head>
+<body>
+    <h3 th:text="${question.subject()}"></h3>
+
+    <p th:text="${question.content()}"></p>
+
+    <strong th:text="|${answers.size()}개의 답변이 있습니다.|"></strong>
+
+    <ul th:each="answer : ${answers}">
+        <li th:text="${answer.content}"></li>
+    </ul>
+    <form th:action="@{|/sbb/questions/${question.id}/answers|}" method="post">
+        <input type="hidden" th:value="${question.id}" name="id">
+        <textarea name="content" id="content" rows="15"></textarea>
+        <input type="submit" value="답변등록">
+    </form>
+</body>
+</html>
