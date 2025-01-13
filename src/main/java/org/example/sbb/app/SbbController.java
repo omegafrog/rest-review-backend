@@ -1,4 +1,4 @@
-package org.example.sbb.app.controller;
+package org.example.sbb.app;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sbb")
-public class HelloController {
+public class SbbController {
 
     @GetMapping
     @ResponseBody
