@@ -2,10 +2,12 @@ package org.example.sbb.app.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity(name = "ANSWER")
+@NoArgsConstructor
 @Getter
 public class Answer {
     @Id
@@ -17,5 +19,10 @@ public class Answer {
     @Column(name="content")
     private String content;
     @Column(name="created_at")
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt = LocalDateTime.now();
+
+    public Answer( Question question, String content) {
+        this.question = question;
+        this.content = content;
+    }
 }
