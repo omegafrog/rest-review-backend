@@ -14,16 +14,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
-//    @Bean
-//    public SecurityFilterChain global(HttpSecurity http) throws Exception {
-//        http.
-//                securityMatcher("/**")
-//                .authorizeHttpRequests(authorizeRequests ->
-//                        authorizeRequests.requestMatchers("/**")
-//                                .permitAll())
-//                .formLogin(AbstractHttpConfigurer::disable);
-//        return http.build();
-//    }
+
+    @Bean
+    public SecurityFilterChain questionChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/sbb/questions/**")
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests.anyRequest().permitAll());
+        return http.build();
+    }
 
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enabled",havingValue = "true")

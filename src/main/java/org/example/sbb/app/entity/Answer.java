@@ -3,6 +3,7 @@ package org.example.sbb.app.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.sbb.app.domain.question.Question;
 
 import java.time.LocalDateTime;
 

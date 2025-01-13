@@ -1,8 +1,9 @@
-package org.example.sbb.app.entity;
+package org.example.sbb.app.domain.question;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.sbb.app.entity.Answer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
