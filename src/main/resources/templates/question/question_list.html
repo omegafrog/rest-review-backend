@@ -1,25 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question list</title>
-</head>
-<body>
-    <table >
-        <thead >
-            <tr >
-                <th>제목</th>
-                <th>내용</th>
-                <th>생성일자</th>
-            </tr>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>생성일자</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="question : ${list}">
-                <td><a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a></td>
-                <td th:text="${question.content}"></td>
-                <td th:text="${question.createdAt}"></td>
-            </tr>
+        <tr th:each="question, loop : ${list}">
+            <td th:text="${loop.count}"></td>
+            <td><a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a></td>
+            <td th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
         </tbody>
     </table>
-</body>
+</div>
 </html>

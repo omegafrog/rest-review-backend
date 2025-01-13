@@ -1,23 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${question.subject()}"></title>
-</head>
-<body>
-    <h3 th:text="${question.subject()}"></h3>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div>
+        <h3 class="border-bottom py-2" th:text="${question.subject()}"></h3>
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;" th:text="${question.content()}"></div>
+                <div class="d-flex justify-content-end">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div th:text="${#temporals.format(question.createdAt(), 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <p th:text="${question.content()}"></p>
+        <h5 class="border-bottom my-3 py-2" th:text="|${answers.size()}개의 답변이 있습니다.|"></h5>
 
-    <strong th:text="|${answers.size()}개의 답변이 있습니다.|"></strong>
+        <div class="card my-3" th:each="answer : ${answers}">
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;" th:text="${answer.content()}"/>
+                <div class="d-flex justify-content-end">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div th:text="${#temporals.format(answer.createdAt(), 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                </div>
+            </div>
 
-    <ul th:each="answer : ${answers}">
-        <li th:text="${answer.content}"></li>
-    </ul>
-    <form th:action="@{|/sbb/questions/${question.id}/answers|}" method="post">
-        <input type="hidden" th:value="${question.id}" name="id">
-        <textarea name="content" id="content" rows="15"></textarea>
-        <input type="submit" value="답변등록">
-    </form>
-</body>
+        </div>
+        <form class="my-3" th:action="@{|/sbb/questions/${question.id}/answers|}" method="post">
+            <input type="hidden" th:value="${question.id}" name="id">
+            <textarea class="form-control" name="content" id="content" rows="15"></textarea>
+            <input type="submit" value="답변등록" class="btn btn-primary my-2">
+        </form>
+    </div>
 </html>
