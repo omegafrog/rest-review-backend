@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.entity.Answer;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class Question {
         this.subject = subject;
         this.content = content;
     }
+
 }
+
 
 

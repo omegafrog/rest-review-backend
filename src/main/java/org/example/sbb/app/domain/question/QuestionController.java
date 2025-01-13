@@ -2,9 +2,11 @@ package org.example.sbb.app.domain.question;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.QuestionDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -21,6 +23,13 @@ public class QuestionController {
 
         model.addAttribute("list", all);
         return "question_list";
+    }
+
+    @GetMapping("/{id}")
+    public String question(Model model, @PathVariable Long id) {
+        QuestionDto dto = service.getQuestionInfo(id);
+        model.addAttribute("question", dto);
+        return "question_info";
     }
 }
 
