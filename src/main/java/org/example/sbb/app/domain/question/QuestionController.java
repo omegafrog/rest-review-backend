@@ -13,12 +13,12 @@ import java.util.List;
 @RequestMapping("/sbb/questions")
 @RequiredArgsConstructor
 public class QuestionController {
+    private final QuestionService service;
 
-    private final QuestionH2Repository repository;
     @GetMapping
     public String questions(Model model) {
+        List<Question> all = service.getQuestionList();
 
-        List<Question> all = repository.findAll();
         model.addAttribute("list", all);
         return "question_list";
     }
