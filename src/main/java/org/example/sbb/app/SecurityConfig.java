@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -62,7 +63,12 @@ public class SecurityConfig {
                         .loginPage("/sbb/user/login")
                         .loginProcessingUrl("/sbb/user/login")
                         .usernameParameter("id")
-                        .passwordParameter("password")
-        );
+                        .passwordParameter("password"))
+                .logout(
+                        logout ->
+                                logout.logoutRequestMatcher(new AntPathRequestMatcher("/sbb/user/logout"))
+                                        .logoutSuccessUrl("/sbb/questions")
+                                        .invalidateHttpSession(true)
+                );
     }
 }

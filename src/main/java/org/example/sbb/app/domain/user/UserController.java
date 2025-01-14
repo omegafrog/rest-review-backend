@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.CreateUserForm;
 import org.example.sbb.app.domain.dto.LoginUserForm;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/sbb/user")
@@ -30,8 +28,12 @@ public class UserController {
         userService.register(form.getId(), form.getPassword1(), form.getPassword2(), form.getEmail());
         return "auth/success";
     }
+
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute(name="form") LoginUserForm form){
+    public String loginPage(@ModelAttribute(name = "form") LoginUserForm form,
+                            @RequestParam(name = "error", required = false) String error, Model model) {
+        if(error!=null)
+            model.addAttribute("error", error);
         return "auth/login";
     }
 }
