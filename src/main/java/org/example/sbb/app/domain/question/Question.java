@@ -38,6 +38,12 @@ public class Question {
     public void addAnswer(Answer answer) {
         answers.add(answer);
     }
+
+    public Question update(String updatedSubject, String updatedContent) {
+        this.subject = updatedSubject;
+        this.content = updatedContent;
+        return this;
+    }
 }
 
 

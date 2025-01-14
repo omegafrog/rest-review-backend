@@ -11,9 +11,14 @@
                         <div th:text="${#temporals.format(question.createdAt(), 'yyyy-MM-dd HH:mm')}"></div>
                     </div>
                 </div>
+                <div class="my-3">
+                    <a th:href="@{|/sbb/questions/${question.id}/modify|}" class="btn btn-sm btn-outline-secondary"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.id}"
+                       th:text="수정"></a>
+                </div>
             </div>
         </div>
-
         <h5 class="border-bottom my-3 py-2" th:text="|${answers.size()}개의 답변이 있습니다.|"></h5>
 
         <div class="card my-3" th:each="answer : ${answers}">

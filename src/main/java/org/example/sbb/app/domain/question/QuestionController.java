@@ -16,11 +16,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -40,11 +42,13 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form, BindingResult bindingResult) {
+    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form ) {
         QuestionDto dto = service.getQuestionInfo(id);
         List<AnswerDto> all = answerService.getAnswerList(id);
+
         model.addAttribute("question", dto);
         model.addAttribute("answers", all);
+
         return "question/question_info";
     }
 
@@ -66,6 +70,20 @@ public class QuestionController {
     @GetMapping("/write/confirm")
     public String writeConfirmPage() {
        return "question/write_confirm";
+    }
+
+    @GetMapping("/{id}/modify")
+    public String modifyQuestionPage(@ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
+        QuestionDto dto = service.getQuestionInfo(id);
+        form.setSubject(dto.subject());
+        form.setContent(dto.content());
+        return "question/question_write";
+    }
+    @PostMapping("/{id}/modify")
+    public String modifyQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        service.modify(id, form.getSubject(), form.getContent(), auth);
+        return "redirect:/sbb/questions/"+id;
     }
 }
 

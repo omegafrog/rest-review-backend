@@ -27,10 +27,14 @@ public class AnswerService {
     public void writeAnswer(Long questionId, String content, Authentication auth) {
         Question founded = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
 
-        SiteUser author = userRepository.findById( ((User)auth.getPrincipal()).getUsername())
+        SiteUser author = userRepository.findById(getUsername(auth))
                 .orElseThrow(EntityNotFoundException::new);
         Answer answer = new Answer(founded, content, author);
         answerRepository.save(answer);
+    }
+
+    private static String getUsername(Authentication auth) {
+        return ((User) auth.getPrincipal()).getUsername();
     }
 
     public List<AnswerDto> getAnswerList(Long questionId){
