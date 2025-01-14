@@ -6,14 +6,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @RequiredArgsConstructor
-public class QuestionForm {
+public class AnswerForm {
     @NotEmpty
-    @Size( max = 50)
-    private final String subject;
-    @NotEmpty
-    @Size( max=500)
+    @Size( max = 500)
     private final String content;
 }

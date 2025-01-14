@@ -4,6 +4,7 @@ package org.example.sbb.app.domain.question;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.AnswerDto;
+import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.answer.AnswerService;
 import org.example.sbb.app.domain.dto.QuestionForm;
@@ -30,7 +31,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String question(Model model, @PathVariable Long id) {
+    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form, BindingResult bindingResult) {
         QuestionDto dto = service.getQuestionInfo(id);
         List<AnswerDto> all = answerService.getAnswerList(id);
         model.addAttribute("question", dto);
@@ -44,7 +45,7 @@ public class QuestionController {
     }
 
     @PostMapping("/write")
-    public String writeQuestion(@Valid QuestionForm form, BindingResult bindingResult) {
+    public String writeQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "question/question_write";
         }

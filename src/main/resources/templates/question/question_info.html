@@ -27,9 +27,10 @@
             </div>
 
         </div>
-        <form class="my-3" th:action="@{|/sbb/questions/${question.id}/answers|}" method="post">
+        <form class="my-3" th:object="${form}" th:action="@{|/sbb/questions/${question.id}/answers|}" method="post">
+            <div th:replace="~{form_error :: formErrorsFragment}"></div>
             <input type="hidden" th:value="${question.id}" name="id">
-            <textarea class="form-control" name="content" id="content" rows="15"></textarea>
+            <textarea class="form-control" th:field="*{content}" id="content" rows="15"></textarea>
             <input type="submit" value="답변등록" class="btn btn-primary my-2">
         </form>
     </div>
