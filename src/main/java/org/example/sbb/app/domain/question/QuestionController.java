@@ -85,5 +85,13 @@ public class QuestionController {
         service.modify(id, form.getSubject(), form.getContent(), auth);
         return "redirect:/sbb/questions/"+id;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/delete")
+    public String deleteQuestion( @PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        service.delete(id, auth);
+        return "redirect:/sbb/questions";
+    }
 }
 

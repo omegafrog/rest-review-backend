@@ -58,4 +58,13 @@ public class QuestionService {
     private String getId(Authentication auth){
         return ((User) auth.getPrincipal()).getUsername();
     }
+
+    public void delete(Long id, Authentication auth) {
+        Question question = repository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+        if(!question.getAuthor().getId().equals(getId(auth)))
+            throw new UsernameNotFoundException(question.getAuthor().getId() + "인 유저를 찾을 수 없습니다.");
+
+        repository.deleteById(id);
+    }
 }
