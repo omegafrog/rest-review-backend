@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <tr th:each="question, loop : ${paging.getContent()}">
-            <td th:text="${loop.count}"></td>
+            <td th:text="${paging.getSize()*paging.getNumber()+loop.count}"></td>
             <td><a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a></td>
             <td th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>

@@ -27,7 +27,7 @@ public class QuestionController {
     private final AnswerService answerService;
 
     @GetMapping
-    public String questions(Model model, Pageable pageable) {
+    public String questions(Model model, @PageableDefault(size = 10) Pageable pageable) {
         Page<Question> all = service.getQuestionPage(pageable);
 
         model.addAttribute("paging", all);
