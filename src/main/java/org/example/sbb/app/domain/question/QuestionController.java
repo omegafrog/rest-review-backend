@@ -3,6 +3,7 @@ package org.example.sbb.app.domain.question;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/sbb/questions")
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionController {
     private final QuestionService service;
     private final AnswerService answerService;
@@ -45,11 +48,13 @@ public class QuestionController {
 
     @GetMapping("/write")
     public String writeQuestionPage(@ModelAttribute(name="form") QuestionForm form) {
+        log.info("{}", SecurityContextHolder.getContext().getAuthentication());
         return "question/question_write";
     }
 
     @PostMapping("/write")
     public String writeQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, BindingResult bindingResult) {
+        log.info("{}", SecurityContextHolder.getContext().getAuthentication());
         if(bindingResult.hasErrors()) {
             return "question/question_write";
         }
