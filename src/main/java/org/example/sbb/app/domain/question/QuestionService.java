@@ -3,8 +3,15 @@ package org.example.sbb.app.domain.question;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.QuestionDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.support.PageableUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -15,6 +22,12 @@ public class QuestionService {
 
     public List<Question> getQuestionList() {
         return repository.findAll();
+    }
+
+    public Page<Question> getQuestionPage(Pageable pageable) {
+        Pageable newPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.desc("createdAt")));
+        return repository.findAll(newPage);
     }
 
     public QuestionDto getQuestionInfo(Long id) {

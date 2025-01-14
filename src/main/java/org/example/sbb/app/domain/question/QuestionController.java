@@ -8,6 +8,10 @@ import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.answer.AnswerService;
 import org.example.sbb.app.domain.dto.QuestionForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +27,10 @@ public class QuestionController {
     private final AnswerService answerService;
 
     @GetMapping
-    public String questions(Model model) {
-        List<Question> all = service.getQuestionList();
+    public String questions(Model model, Pageable pageable) {
+        Page<Question> all = service.getQuestionPage(pageable);
 
-        model.addAttribute("list", all);
+        model.addAttribute("paging", all);
         return "question/question_list";
     }
 
