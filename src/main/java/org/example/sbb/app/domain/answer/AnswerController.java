@@ -6,6 +6,7 @@ import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.question.QuestionService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class AnswerController {
             model.addAttribute("answers", answerList);
             return "question/question_info";
         }
-        service.writeAnswer(questionId, form.getContent());
+        service.writeAnswer(questionId, form.getContent(), SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/sbb/questions/"+questionId;
     }
 }

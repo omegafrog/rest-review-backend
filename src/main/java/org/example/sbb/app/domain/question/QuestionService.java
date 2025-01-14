@@ -3,11 +3,15 @@ package org.example.sbb.app.domain.question;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.QuestionDto;
+import org.example.sbb.app.domain.user.SiteUser;
+import org.example.sbb.app.domain.user.UserH2Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.support.PageableUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +23,7 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionH2Repository repository;
+    private final UserH2Repository userRepository;
 
     public List<Question> getQuestionList() {
         return repository.findAll();
@@ -35,8 +40,11 @@ public class QuestionService {
                 .orElseThrow(EntityNotFoundException::new));
     }
 
-    public void writeQuestion(String subject, String content) {
-        Question question = new Question(subject, content);
+    public void writeQuestion(String subject, String content, Authentication auth) {
+
+        SiteUser author= userRepository.findById( ((User)auth.getPrincipal()).getUsername())
+                .orElseThrow(EntityNotFoundException::new);
+        Question question = new Question(subject, content, author);
         repository.save(question);
     }
 }

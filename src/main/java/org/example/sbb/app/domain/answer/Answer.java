@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.question.Question;
+import org.example.sbb.app.domain.user.SiteUser;
 
 import java.time.LocalDateTime;
 
 @Entity(name = "ANSWER")
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +23,16 @@ public class Answer {
     @Column(name="created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    public Answer( Question question, String content) {
+    @ManyToOne
+    @JoinColumn(name="author_id")
+    private SiteUser author;
+
+    public Answer( Question question, String content, SiteUser author) {
         this.question = question;
         this.content = content;
+        question.addAnswer(this);
+        this.author = author;
+        author.addWroteAnswers(this);
     }
+
 }

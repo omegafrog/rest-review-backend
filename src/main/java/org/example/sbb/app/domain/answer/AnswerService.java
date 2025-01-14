@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.question.QuestionH2Repository;
+import org.example.sbb.app.domain.user.SiteUser;
+import org.example.sbb.app.domain.user.UserH2Repository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +22,14 @@ public class AnswerService {
 
     private final AnswerH2Repository answerRepository;
     private final QuestionH2Repository questionRepository;
+    private final UserH2Repository userRepository;
 
-    public void writeAnswer(Long questionId, String content) {
+    public void writeAnswer(Long questionId, String content, Authentication auth) {
         Question founded = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
 
-        Answer answer = new Answer(founded, content);
+        SiteUser author = userRepository.findById( ((User)auth.getPrincipal()).getUsername())
+                .orElseThrow(EntityNotFoundException::new);
+        Answer answer = new Answer(founded, content, author);
         answerRepository.save(answer);
     }
 
