@@ -6,6 +6,7 @@ import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.question.QuestionService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ public class AnswerController {
 
     private final AnswerService service;
     private final QuestionService questionService;
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/questions/{question-id}/answers")
     public String writeAnswer(@PathVariable(name="question-id") Long questionId,
                               @Valid @ModelAttribute(name="form") AnswerForm form,
