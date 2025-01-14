@@ -12,7 +12,13 @@
         <tbody>
         <tr th:each="question, loop : ${paging.getContent()}">
             <td th:text="${paging.totalElements-(paging.getSize()*paging.getNumber()+loop.count)}"></td>
-            <td><a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a></td>
+            <td>
+                <a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a>
+                <span class="text-danger small ms-2"
+                      th:if="${#lists.size(question.answers) > 0}"
+                      th:text="|[${#lists.size(question.answers)}]|">
+                </span>
+            </td>
             <td th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         </tbody>
