@@ -67,4 +67,12 @@ public class AnswerController {
         service.modify(answerId, form.getContent(), auth);
         return "redirect:/sbb/questions/"+questionId;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/questions/{question-id}/answers/{answer-id}/delete")
+    public String deleteAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        service.delete(answerId, auth);
+        return "redirect:/sbb/questions/"+questionId;
+    }
 }

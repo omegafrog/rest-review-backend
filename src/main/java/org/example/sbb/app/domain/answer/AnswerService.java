@@ -53,15 +53,23 @@ public class AnswerService {
     public void prepareAnswerForm(Long answerId, AnswerForm form, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(answerId + "인 답변이 없습니다."));
 
-        if(!answer.getAuthor().getId().equals(((User)auth.getPrincipal()).getUsername()))
-            throw new BadCredentialsException("작성자가 아닙니다.");
+        isAuthor(auth, answer);
         form.setContent(answer.getContent());
     }
 
     public void modify(Long answerId, @NotEmpty @Size( max = 500) String content, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
-        if(!answer.getAuthor().getId().equals(((User)auth.getPrincipal()).getUsername()))
-            throw new BadCredentialsException("작성자가 아닙니다.");
+        isAuthor(auth, answer);
         answer.modify(content);
+    }
+    public void delete(Long answerId, Authentication auth) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
+        isAuthor(auth, answer);
+        answerRepository.deleteById(answerId);
+    }
+
+    private static void isAuthor(Authentication auth, Answer answer) {
+        if(!answer.getAuthor().getId().equals(((User) auth.getPrincipal()).getUsername()))
+            throw new BadCredentialsException("작성자가 아닙니다.");
     }
 }
