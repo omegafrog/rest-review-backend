@@ -22,6 +22,8 @@ public class Question {
     private String content;
     @Column(name="created_at")
     private LocalDateTime createdAt=LocalDateTime.now();
+    @Column(name="modified_at")
+    private LocalDateTime modifiedAt=LocalDateTime.now();
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers = new ArrayList<>();
     @ManyToOne
@@ -42,6 +44,7 @@ public class Question {
     public Question update(String updatedSubject, String updatedContent) {
         this.subject = updatedSubject;
         this.content = updatedContent;
+        this.modifiedAt = LocalDateTime.now();
         return this;
     }
 }

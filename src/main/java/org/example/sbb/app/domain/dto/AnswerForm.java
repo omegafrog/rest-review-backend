@@ -12,5 +12,5 @@ import lombok.Setter;
 public class AnswerForm {
     @NotEmpty
     @Size( max = 500)
-    private final String content;
+    private String content;
 }

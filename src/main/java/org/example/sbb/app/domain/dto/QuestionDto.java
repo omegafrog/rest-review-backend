@@ -4,7 +4,7 @@ import org.example.sbb.app.domain.question.Question;
 
 import java.time.LocalDateTime;
 
-public record QuestionDto(Long id, String subject, String content, SiteUserDto author, LocalDateTime createdAt) {
+public record QuestionDto(Long id, String subject, String content, SiteUserDto author, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 
     public static QuestionDto of(Question question) {
         return new QuestionDto(
@@ -12,6 +12,7 @@ public record QuestionDto(Long id, String subject, String content, SiteUserDto a
                 question.getSubject(),
                 question.getContent(),
                 SiteUserDto.of(question.getAuthor()),
-                question.getCreatedAt());
+                question.getCreatedAt(),
+                question.getModifiedAt());
     }
 }
