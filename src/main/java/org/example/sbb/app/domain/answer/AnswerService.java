@@ -9,6 +9,8 @@ import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.question.QuestionH2Repository;
+import org.example.sbb.app.domain.relation.AnswerVoter;
+import org.example.sbb.app.domain.relation.AnswerVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserH2Repository;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +29,7 @@ public class AnswerService {
     private final AnswerH2Repository answerRepository;
     private final QuestionH2Repository questionRepository;
     private final UserH2Repository userRepository;
+    private final AnswerVoterRepository answerVoterRepository;
 
     public void writeAnswer(Long questionId, String content, Authentication auth) {
         Question founded = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
@@ -67,5 +70,14 @@ public class AnswerService {
     private static void isAuthor(Authentication auth, Answer answer) {
         if(!answer.getAuthor().getId().equals(((User) auth.getPrincipal()).getUsername()))
             throw new BadCredentialsException("작성자가 아닙니다.");
+    }
+
+    public void recommend(Long answerId, Authentication auth) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
+        SiteUser voter = userRepository.findById(getUsername(auth)).orElseThrow(EntityNotFoundException::new);
+        if(answer.getAuthor().equals(voter))
+            throw new RuntimeException("자신의 글을 추천할 수 없습니다.");
+        AnswerVoter relation = answer.vote(voter);
+        answerVoterRepository.save(relation);
     }
 }

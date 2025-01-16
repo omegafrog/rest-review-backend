@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.question.Question;
+import org.example.sbb.app.domain.relation.AnswerVoter;
 import org.example.sbb.app.domain.user.SiteUser;
 
 import java.time.LocalDateTime;
@@ -24,8 +25,8 @@ public class Answer {
     private Question question;
     @Column(name="content")
     private String content;
-    @ManyToMany
-    private final List<SiteUser> voters = new ArrayList<>();
+    @OneToMany(mappedBy = "answer")
+    private final List<AnswerVoter> voters = new ArrayList<>();
     @Column(name="created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
     @Column(name="modified_at")
@@ -45,5 +46,12 @@ public class Answer {
     public void modify(@NotEmpty @Size(max = 500) String content) {
         this.content = content;
         this.modifiedAt = LocalDateTime.now();
+    }
+
+    public AnswerVoter vote(SiteUser voter) {
+        AnswerVoter answerVoter = new AnswerVoter(this, voter);
+        voters.add(answerVoter);
+        voter.getVotedAnswers().add(answerVoter);
+        return answerVoter;
     }
 }

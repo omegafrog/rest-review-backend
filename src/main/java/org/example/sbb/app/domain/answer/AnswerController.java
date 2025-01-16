@@ -73,4 +73,11 @@ public class AnswerController {
         service.delete(answerId, auth);
         return "redirect:/sbb/questions/"+questionId;
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/questions/{question-id}/answers/{answer-id}/recommend")
+    public String recommendAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        service.recommend(answerId, auth);
+        return "redirect:/sbb/questions/"+questionId;
+    }
 }

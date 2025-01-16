@@ -10,7 +10,6 @@ public record AnswerDto(Long id,
                         LocalDateTime createdAt,
                         LocalDateTime modifiedAt,
                         List<SiteUserDto> voters,
-                        QuestionDto question,
                         SiteUserDto author) {
 
     public static AnswerDto of(Answer answer){
@@ -18,8 +17,7 @@ public record AnswerDto(Long id,
                 answer.getContent(),
                 answer.getCreatedAt(),
                 answer.getModifiedAt(),
-                answer.getVoters().stream().map(SiteUserDto::of).toList(),
-                QuestionDto.of(answer.getQuestion()),
+                answer.getVoters().stream().map(answerVoter->SiteUserDto.of(answerVoter.getVoter())).toList(),
                 SiteUserDto.of(answer.getAuthor()));
     }
 }

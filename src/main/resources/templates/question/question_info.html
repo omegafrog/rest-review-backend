@@ -55,7 +55,7 @@
                 <a href="javascript:void(0);" th:data-uri="@{|/sbb/questions/${question.id}/answers/${answer.id}/recommend|}"
                    class="recommend btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()">
                     추천
-                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voters)}"></span>
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voters)}"></span>
                 </a>
                 <a th:href="@{|/sbb/questions/${question.id}/answers/${answer.id}/modify|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
