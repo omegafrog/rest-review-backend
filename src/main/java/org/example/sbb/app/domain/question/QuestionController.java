@@ -44,10 +44,8 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form ) {
         QuestionDto dto = service.getQuestionInfo(id);
-        List<AnswerDto> all = answerService.getAnswerList(id);
 
         model.addAttribute("question", dto);
-        model.addAttribute("answers", all);
 
         return "question/question_info";
     }
@@ -92,6 +90,13 @@ public class QuestionController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         service.delete(id, auth);
         return "redirect:/sbb/questions";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/recommend")
+    public String recommendQuestion( @PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        service.recommend(id, auth);
+        return "redirect:/sbb/questions/"+id;
     }
 }
 

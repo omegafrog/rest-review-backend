@@ -1,6 +1,5 @@
 package org.example.sbb.app.domain.answer;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +7,6 @@ import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.question.QuestionService;
-import org.springframework.boot.Banner;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

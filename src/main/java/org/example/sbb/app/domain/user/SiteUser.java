@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
 import org.example.sbb.app.domain.question.Question;
+import org.example.sbb.app.domain.relation.QuestionVoter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,12 @@ public class SiteUser {
 
     @OneToMany(mappedBy = "author",cascade = CascadeType.REMOVE)
     private List<Answer> wroteAnswers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "voter", cascade = CascadeType.REMOVE)
+    private List<QuestionVoter> votedQuestions = new ArrayList<>();
+
+    @ManyToMany
+    private List<Answer> votedAnswers = new ArrayList<>();
 
     public SiteUser(String id, String password, String email) {
         this.id = id;

@@ -9,6 +9,8 @@ import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.user.SiteUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "ANSWER")
 @Getter
@@ -22,6 +24,8 @@ public class Answer {
     private Question question;
     @Column(name="content")
     private String content;
+    @ManyToMany
+    private final List<SiteUser> voters = new ArrayList<>();
     @Column(name="created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
     @Column(name="modified_at")

@@ -46,10 +46,6 @@ public class AnswerService {
         return question.getAnswers().stream().map(AnswerDto::of).collect(Collectors.toList());
     }
 
-    public boolean existAnswer(Long answerId) {
-        return answerRepository.existsById(answerId);
-    }
-
     public void prepareAnswerForm(Long answerId, AnswerForm form, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(answerId + "인 답변이 없습니다."));
 

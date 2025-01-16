@@ -3,10 +3,23 @@ package org.example.sbb.app.domain.dto;
 import org.example.sbb.app.domain.answer.Answer;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public record AnswerDto(Long id, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, Long questionId, SiteUserDto author) {
+public record AnswerDto(Long id,
+                        String content,
+                        LocalDateTime createdAt,
+                        LocalDateTime modifiedAt,
+                        List<SiteUserDto> voters,
+                        QuestionDto question,
+                        SiteUserDto author) {
 
     public static AnswerDto of(Answer answer){
-        return new AnswerDto(answer.getId(), answer.getContent(), answer.getCreatedAt(), answer.getModifiedAt(), answer.getQuestion().getId(), SiteUserDto.of(answer.getAuthor()));
+        return new AnswerDto(answer.getId(),
+                answer.getContent(),
+                answer.getCreatedAt(),
+                answer.getModifiedAt(),
+                answer.getVoters().stream().map(SiteUserDto::of).toList(),
+                QuestionDto.of(answer.getQuestion()),
+                SiteUserDto.of(answer.getAuthor()));
     }
 }
