@@ -43,9 +43,10 @@ public class Answer {
         author.addWroteAnswers(this);
     }
 
-    public void modify(@NotEmpty @Size(max = 500) String content) {
+    public Answer modify(@NotEmpty @Size(max = 500) String content) {
         this.content = content;
         this.modifiedAt = LocalDateTime.now();
+        return this;
     }
 
     public AnswerVoter vote(SiteUser voter) {

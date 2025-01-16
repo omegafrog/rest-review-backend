@@ -39,8 +39,8 @@ public class AnswerController {
             model.addAttribute("answers", answerList);
             return "question/question_info";
         }
-        service.writeAnswer(questionId, form.getContent(), SecurityContextHolder.getContext().getAuthentication());
-        return "redirect:/sbb/questions/"+questionId;
+        AnswerDto answerDto = service.writeAnswer(questionId, form.getContent(), SecurityContextHolder.getContext().getAuthentication());
+        return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -62,8 +62,8 @@ public class AnswerController {
                                   @ModelAttribute(name="form") AnswerForm form){
         log.info("{}, {}", questionId, answerId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        service.modify(answerId, form.getContent(), auth);
-        return "redirect:/sbb/questions/"+questionId;
+        AnswerDto answerDto = service.modify(answerId, form.getContent(), auth);
+        return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -77,7 +77,7 @@ public class AnswerController {
     @GetMapping("/questions/{question-id}/answers/{answer-id}/recommend")
     public String recommendAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        service.recommend(answerId, auth);
-        return "redirect:/sbb/questions/"+questionId;
+        AnswerDto answerDto = service.recommend(answerId, auth);
+        return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 }

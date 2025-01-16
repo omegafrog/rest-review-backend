@@ -31,13 +31,13 @@ public class AnswerService {
     private final UserH2Repository userRepository;
     private final AnswerVoterRepository answerVoterRepository;
 
-    public void writeAnswer(Long questionId, String content, Authentication auth) {
+    public AnswerDto writeAnswer(Long questionId, String content, Authentication auth) {
         Question founded = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
 
         SiteUser author = userRepository.findById(getUsername(auth))
                 .orElseThrow(EntityNotFoundException::new);
         Answer answer = new Answer(founded, content, author);
-        answerRepository.save(answer);
+        return AnswerDto.of(answerRepository.save(answer));
     }
 
     private static String getUsername(Authentication auth) {
@@ -56,10 +56,10 @@ public class AnswerService {
         form.setContent(answer.getContent());
     }
 
-    public void modify(Long answerId, @NotEmpty @Size( max = 500) String content, Authentication auth) {
+    public AnswerDto modify(Long answerId, @NotEmpty @Size( max = 500) String content, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
         isAuthor(auth, answer);
-        answer.modify(content);
+        return AnswerDto.of(answer.modify(content));
     }
     public void delete(Long answerId, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
@@ -72,12 +72,13 @@ public class AnswerService {
             throw new BadCredentialsException("작성자가 아닙니다.");
     }
 
-    public void recommend(Long answerId, Authentication auth) {
+    public AnswerDto recommend(Long answerId, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
         SiteUser voter = userRepository.findById(getUsername(auth)).orElseThrow(EntityNotFoundException::new);
         if(answer.getAuthor().equals(voter))
             throw new RuntimeException("자신의 글을 추천할 수 없습니다.");
         AnswerVoter relation = answer.vote(voter);
         answerVoterRepository.save(relation);
+        return AnswerDto.of(answer);
     }
 }
