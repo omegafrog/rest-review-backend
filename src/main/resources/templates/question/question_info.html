@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <h5 class="border-bottom my-3 py-2" th:text="|${question.answers().size()}개의 답변이 있습니다.|"></h5>
+    <h5 class="border-bottom my-3 py-2" th:text="|${question.answers().getTotalElements()}개의 답변이 있습니다.|"></h5>
 
     <div class="card my-3" th:each="answer : ${question.answers()}">
         <a th:id="|answer_${answer.id}|"></a>
@@ -76,7 +76,29 @@
         <textarea class="form-control" th:field="*{content}" id="content" rows="15"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
+    <div th:if="${!question.answers().isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!question.answers().hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${question.answers().number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, question.answers().totalPages-1)}"
+                th:if="${page >= question.answers().number-5 and page <= question.answers().number+5}"
+                th:classappend="${page == question.answers().number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!question.answers().hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${question.answers().number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
+
 <script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function (element) {

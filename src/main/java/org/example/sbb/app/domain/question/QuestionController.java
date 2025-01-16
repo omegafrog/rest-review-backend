@@ -7,20 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.dto.*;
 import org.example.sbb.app.domain.answer.AnswerService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/sbb/questions")
@@ -35,7 +32,7 @@ public class QuestionController {
                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
                             @PageableDefault(size = 10) Pageable pageable,
                             @ModelAttribute(name="searchForm") SearchForm searchForm) {
-        Page<QuestionDto> all = service.getQuestionPage(keyword, pageable);
+        Page<QuestionListDto> all = service.getQuestionPage(keyword, pageable);
 
         model.addAttribute("paging", all);
         model.addAttribute("keyword", keyword);
@@ -44,8 +41,8 @@ public class QuestionController {
 
 
     @GetMapping("/{id}")
-    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form ) {
-        QuestionDto dto = service.getQuestionInfo(id);
+    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form, @PageableDefault(size=5) Pageable pageable ) {
+        QuestionDto dto = service.getQuestionInfo(id, pageable);
 
         model.addAttribute("question", dto);
 
@@ -74,7 +71,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/modify")
     public String modifyQuestionPage(@ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
-        QuestionDto dto = service.getQuestionInfo(id);
+        QuestionDto dto = service.getQuestionInfo(id, PageRequest.of(0, 10));
         form.setSubject(dto.subject());
         form.setContent(dto.content());
         return "question/question_write";

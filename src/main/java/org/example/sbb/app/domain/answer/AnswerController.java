@@ -7,6 +7,7 @@ import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.question.QuestionService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,9 +33,8 @@ public class AnswerController {
                               @Valid @ModelAttribute(name="form") AnswerForm form,
                               BindingResult bindingResult ,Model model) {
         if(bindingResult.hasErrors()) {
-            QuestionDto dto = questionService.getQuestionInfo(questionId);
+            QuestionDto dto = questionService.getQuestionInfo(questionId, PageRequest.of(0, 10));
             List<AnswerDto> answerList = service.getAnswerList(questionId);
-            questionService.getQuestionInfo(questionId);
             model.addAttribute("question", dto);
             model.addAttribute("answers", answerList);
             return "question/question_info";

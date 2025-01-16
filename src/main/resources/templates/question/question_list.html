@@ -27,8 +27,8 @@
             <td class="text-start">
                 <a th:href="@{|/sbb/questions/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
-                      th:if="${#lists.size(question.answers) > 0}"
-                      th:text="|[${#lists.size(question.answers)}]|">
+                      th:if="${question.answerCount > 0}"
+                      th:text="|[${question.answerCount}]|">
                 </span>
             </td>
             <td><span th:if="${question.author !=null}" th:text="${question.author.id}"></span></td>

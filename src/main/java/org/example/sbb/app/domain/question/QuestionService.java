@@ -5,7 +5,10 @@ import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
+import org.example.sbb.app.domain.answer.AnswerH2Repository;
+import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
+import org.example.sbb.app.domain.dto.QuestionListDto;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.example.sbb.app.domain.relation.QuestionVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
@@ -29,17 +32,20 @@ public class QuestionService {
 
     private final QuestionH2Repository repository;
     private final UserH2Repository userRepository;
+    private final AnswerH2Repository answerRepository;
     private final QuestionVoterRepository questionVoterRepository;
 
-    public Page<QuestionDto> getQuestionPage(String keyword, Pageable pageable) {
+    public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {
         Pageable newPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by(Sort.Order.desc("createdAt")));
-        return repository.findAll(search(keyword), newPage).map(QuestionDto::of);
+        return repository.findAll(search(keyword), newPage).map(QuestionListDto::of);
     }
 
-    public QuestionDto getQuestionInfo(Long id) {
+    public QuestionDto getQuestionInfo(Long id, Pageable pageable) {
+        Page<Answer> all = answerRepository.findAll(pageable);
+        Page<AnswerDto> map = all.map(AnswerDto::of);
         return QuestionDto.of(repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new));
+                .orElseThrow(EntityNotFoundException::new), map);
     }
 
     public void writeQuestion(String subject, String content, Authentication auth) {
@@ -104,9 +110,5 @@ public class QuestionService {
                         cb.like(u2.get("id"), "%" + keyword + "%"));   // 답변 작성자
             }
         };
-    }
-
-    public Page<QuestionDto> searchQuestions(String keyword, Pageable pageable) {
-        return repository.findAll(search(keyword), pageable).map(QuestionDto::of);
     }
 }
