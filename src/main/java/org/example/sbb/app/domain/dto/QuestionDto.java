@@ -19,7 +19,7 @@ public record QuestionDto(Long id,
                 question.getId(),
                 question.getSubject(),
                 question.getContent(),
-                SiteUserDto.of(question.getAuthor()),
+                question.getAuthor() != null ?SiteUserDto.of(question.getAuthor()):null,
                 question.getAnswers().stream().map(AnswerDto::of).toList(),
                 question.getVoters().stream().map(
                         questionVoter -> SiteUserDto.of(questionVoter.getVoter())
