@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.CreateUserForm;
 import org.example.sbb.app.domain.dto.LoginUserForm;
+import org.example.sbb.app.domain.dto.RecoveryForm;
+import org.example.sbb.app.domain.dto.ResetPasswordForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,4 +38,32 @@ public class UserController {
             model.addAttribute("error", error);
         return "auth/login";
     }
+
+    @GetMapping("/recovery")
+    public String recoveryPasswordPage(@ModelAttribute(name="form") RecoveryForm form,
+                                       @RequestParam(defaultValue = "") String mode) {
+        if(mode.equals("confirm"))
+            return "auth/recovery_confirm";
+        return "auth/recovery";
+    }
+
+    @PostMapping("/recovery")
+    public String recoveryPassword(@ModelAttribute(name="userId") String userId){
+        userService.recovery(userId);
+        return "redirect:/sbb/user/recovery?confirm";
+    }
+
+    @GetMapping("/reset")
+    public String resetPasswordPage(Model model, @ModelAttribute(name="form") ResetPasswordForm form, @RequestParam(name="key") String recoveryKey){
+        model.addAttribute("key", recoveryKey);
+        return "auth/reset";
+    }
+
+    @PostMapping("/reset")
+    public String resetPassword(@RequestParam(name="key") String recoveryKey, @ModelAttribute(name="form") ResetPasswordForm form) {
+        userService.reset(recoveryKey, form);
+        return "auth/reset-success";
+    }
+
+
 }

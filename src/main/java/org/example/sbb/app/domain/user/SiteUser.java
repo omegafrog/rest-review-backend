@@ -61,4 +61,12 @@ public class SiteUser {
 //                ", votedAnswers=" + votedAnswers +
                 '}';
     }
+
+    public void resetPassword(String encodedPassword) {
+        if(this.password.equals(encodedPassword))
+            throw new IllegalArgumentException("비밀번호가 전과 같습니다.");
+        this.password = encodedPassword;
+    }
+
+
 }
