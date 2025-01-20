@@ -1,5 +1,6 @@
 package org.example.sbb.app.domain.user;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,4 +18,8 @@ public class UserService {
         return userRepository.save(new SiteUser(id, passwordEncoder.encode(password1), email));
     }
 
+    public SiteUser findUser(String username) {
+        userRepository.findById(username)
+                .orElseThrow(EntityNotFoundException::new);
+    }
 }

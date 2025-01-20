@@ -5,14 +5,16 @@ import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
-import org.example.sbb.app.domain.answer.AnswerH2Repository;
+import org.example.sbb.app.domain.answer.AnswerService;
+import org.example.sbb.app.domain.answer.SortOption;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.dto.QuestionListDto;
+import org.example.sbb.app.domain.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.example.sbb.app.domain.relation.QuestionVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
-import org.example.sbb.app.domain.user.UserH2Repository;
+import org.example.sbb.app.domain.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,17 +25,15 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class QuestionService {
 
     private final QuestionH2Repository repository;
-    private final UserH2Repository userRepository;
-    private final AnswerH2Repository answerRepository;
     private final QuestionVoterRepository questionVoterRepository;
+    private final AnswerService answerService;
+    private final UserService userService;
 
     public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {
         Pageable newPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
@@ -41,17 +41,19 @@ public class QuestionService {
         return repository.findAll(search(keyword), newPage).map(QuestionListDto::of);
     }
 
-    public QuestionDto getQuestionInfo(Long id, Pageable pageable) {
-        Page<Answer> all = answerRepository.findAll(pageable);
-        Page<AnswerDto> map = all.map(AnswerDto::of);
-        return QuestionDto.of(repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new), map);
+    public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable pageable) {
+        Question question = repository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+        Page<AnswerDto> answerPage = answerService.getAnswerList(id, pageable, option);
+        return QuestionDto.of(question, answerPage);
     }
 
+    public QuestionDto getQuestionInfo(Long id, Pageable pageable) {
+        SortOption option = SortOption.of("time");
+        return getQuestionInfo(id, option, pageable);
+    }
     public void writeQuestion(String subject, String content, Authentication auth) {
-
-        SiteUser author = userRepository.findById(((User) auth.getPrincipal()).getUsername())
-                .orElseThrow(EntityNotFoundException::new);
+        SiteUser author = userService.findUser(((User) auth.getPrincipal()).getUsername());
         Question question = new Question(subject, content, author);
         repository.save(question);
     }
@@ -79,8 +81,7 @@ public class QuestionService {
     public void recommend(Long id, Authentication auth) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        SiteUser voter = userRepository.findById(getId(auth))
-                .orElseThrow(EntityNotFoundException::new);
+        SiteUser voter = userService.findUser(((User) auth.getPrincipal()).getUsername());
 
         if (question.getAuthor().equals(voter))
             throw new RuntimeException("자신의 글은 추천할 수 없습니다.");
