@@ -5,6 +5,15 @@
         <div class="col-6">
             <a th:href="@{/sbb/questions/write}" class="btn btn-primary">질문 등록하기</a>
         </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                정렬 기준
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="?sortOption=time">최신순</a></li>
+                <li><a class="dropdown-item" href="?sortOption=recommend">추천순</a></li>
+            </ul>
+        </div>
         <div class="col-6">
             <div class="input-group">
                 <input type="text" id="search_kw" class="form-control" th:value="${keyword}">
@@ -12,6 +21,7 @@
             </div>
         </div>
     </div>
+
     <table class="table">
         <thead class="table-dark">
         <tr class="text-center">
@@ -19,6 +29,7 @@
             <th style="width:50%">제목</th>
             <th>작성자</th>
             <th>생성일자</th>
+            <th>추천수</th>
         </tr>
         </thead>
         <tbody>
@@ -33,7 +44,7 @@
             </td>
             <td><span th:if="${question.author !=null}" th:text="${question.author.id}"></span></td>
             <td th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-
+            <td th:text="${question.voterCount}"/>
         </tr>
         </tbody>
     </table>

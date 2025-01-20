@@ -49,7 +49,7 @@ public class AnswerController {
                                    @ModelAttribute(name="form") AnswerForm form,
                                    Model model) {
         log.debug("{}, {}", questionId, answerId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         service.prepareAnswerForm(answerId, form, auth);
         model.addAttribute("questionId", questionId);
         model.addAttribute("answerId", answerId);
@@ -61,7 +61,7 @@ public class AnswerController {
     public String modifyingAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId,
                                   @ModelAttribute(name="form") AnswerForm form){
         log.info("{}, {}", questionId, answerId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         AnswerDto answerDto = service.modify(answerId, form.getContent(), auth);
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
@@ -69,15 +69,20 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/questions/{question-id}/answers/{answer-id}/delete")
     public String deleteAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         service.delete(answerId, auth);
         return "redirect:/sbb/questions/"+questionId;
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/questions/{question-id}/answers/{answer-id}/recommend")
     public String recommendAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         AnswerDto answerDto = service.recommend(answerId, auth);
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
+    }
+
+    private static Authentication getAuthentication() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth;
     }
 }

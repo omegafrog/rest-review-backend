@@ -112,4 +112,8 @@ public class QuestionService {
             }
         };
     }
+
+    public Question getQuestion(Long questionId) {
+        return repository.findById(questionId).orElseThrow(EntityNotFoundException::new);
+    }
 }

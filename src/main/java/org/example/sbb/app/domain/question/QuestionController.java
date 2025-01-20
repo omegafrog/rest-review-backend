@@ -61,13 +61,19 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String writeQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, BindingResult bindingResult) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         if(bindingResult.hasErrors()) {
             return "question/question_write";
         }
         service.writeQuestion(form.getSubject(), form.getContent(), auth);
         return "redirect:write/confirm";
     }
+
+    private static Authentication getAuthentication() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth;
+    }
+
     @GetMapping("/write/confirm")
     public String writeConfirmPage() {
        return "question/write_confirm";
@@ -82,7 +88,7 @@ public class QuestionController {
     }
     @PostMapping("/{id}/modify")
     public String modifyQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         service.modify(id, form.getSubject(), form.getContent(), auth);
         return "redirect:/sbb/questions/"+id;
     }
@@ -90,14 +96,14 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/delete")
     public String deleteQuestion( @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         service.delete(id, auth);
         return "redirect:/sbb/questions";
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/recommend")
     public String recommendQuestion( @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = getAuthentication();
         service.recommend(id, auth);
         return "redirect:/sbb/questions/"+id;
     }

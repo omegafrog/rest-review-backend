@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public SiteUser findUser(String username) {
-        userRepository.findById(username)
+        return userRepository.findById(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
 }
