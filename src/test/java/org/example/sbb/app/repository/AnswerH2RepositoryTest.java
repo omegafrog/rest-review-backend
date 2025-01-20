@@ -1,10 +1,10 @@
 package org.example.sbb.app.repository;
 
 import org.assertj.core.api.Assertions;
-import org.example.sbb.app.domain.answer.AnswerH2Repository;
-import org.example.sbb.app.domain.question.QuestionH2Repository;
 import org.example.sbb.app.domain.answer.Answer;
+import org.example.sbb.app.domain.answer.AnswerH2Repository;
 import org.example.sbb.app.domain.question.Question;
+import org.example.sbb.app.domain.question.repository.QuestionH2Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ class AnswerH2RepositoryTest {
 
     @Test
     void saveTest(){
-        Question question = new Question("hi", "hihi");
+        Question question = new Question("hi", "hihi",null);
         Question saved = questionH2Repository.save(question);
-        Answer answer = new Answer(saved, "bye" );
+        Answer answer = new Answer(saved, "bye" ,null);
         Answer savedAnswer = answerH2Repository.save(answer);
 
         Assertions.assertThat(savedAnswer).isNotNull();
