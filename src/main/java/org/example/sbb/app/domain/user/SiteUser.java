@@ -48,4 +48,17 @@ public class SiteUser {
     public void addWroteAnswers(Answer answer) {
         wroteAnswers.add(answer);
     }
+
+    @Override
+    public String toString() {
+        return "SiteUser{" +
+                "id='" + id + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+//                ", wroteQuestions=" + wroteQuestions.stream().map(q->q.getId().toString()).collect(Collectors.joining(",  ")) +
+//                ", wroteAnswers=" + wroteAnswers +
+//                ", votedQuestions=" + votedQuestions +
+//                ", votedAnswers=" + votedAnswers +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import org.example.sbb.app.domain.user.SiteUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(name = "QUESTION")
 @Getter
@@ -57,6 +58,21 @@ public class Question {
         voters.add(questionVoter);
         voter.getVotedQuestions().add(questionVoter);
         return questionVoter;
+    }
+
+    @Override
+    public String toString() {
+        String collect = voters.stream().map(voters -> voters.getVoter().toString()).collect(Collectors.joining(", "));
+        return "Question{" +
+                "id=" + id +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                ", voters=" + collect +
+                ", createdAt=" + createdAt +
+                ", modifiedAt=" + modifiedAt +
+                ", answers=" + answers +
+                ", author=" + author +
+                '}';
     }
 }
 
