@@ -8,6 +8,7 @@ public record QuestionListDto(Long id,
                               String subject,
                               SiteUserDto author,
                               Integer answerCount,
+                              Integer voterCount,
                               LocalDateTime createdAt) {
 
     public static QuestionListDto of(Question question) {
@@ -16,6 +17,7 @@ public record QuestionListDto(Long id,
                 question.getSubject(),
                 question.getAuthor() != null ? SiteUserDto.of(question.getAuthor()) : null,
                 question.getAnswers().size(),
+                question.getVoters().size(),
                 question.getCreatedAt());
     }
 }

@@ -31,9 +31,10 @@ public class QuestionController {
     @GetMapping
     public String questions(Model model,
                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
+                            @RequestParam(name="sortOption", defaultValue = "time") String sortOption,
                             @PageableDefault(size = 10) Pageable pageable,
                             @ModelAttribute(name="searchForm") SearchForm searchForm) {
-        Page<QuestionListDto> all = service.getQuestionPage(keyword, pageable);
+        Page<QuestionListDto> all = service.getQuestionPage(keyword, SortOption.of(sortOption), pageable);
 
         model.addAttribute("paging", all);
         model.addAttribute("keyword", keyword);

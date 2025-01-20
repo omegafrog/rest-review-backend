@@ -5,11 +5,12 @@ import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
-import org.example.sbb.app.domain.answer.AnswerService;
+import org.example.sbb.app.domain.answer.QueryDslAnswerRepository;
 import org.example.sbb.app.domain.answer.SortOption;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.dto.QuestionListDto;
+import org.example.sbb.app.domain.question.repository.QueryDslQuestionH2Repository;
 import org.example.sbb.app.domain.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.example.sbb.app.domain.relation.QuestionVoterRepository;
@@ -32,19 +33,25 @@ public class QuestionService {
 
     private final QuestionH2Repository repository;
     private final QuestionVoterRepository questionVoterRepository;
-    private final AnswerService answerService;
+    private final QueryDslQuestionH2Repository queryDslQuestionH2Repository;
+    private final QueryDslAnswerRepository answerRepository;
     private final UserService userService;
+
 
     public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {
         Pageable newPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by(Sort.Order.desc("createdAt")));
         return repository.findAll(search(keyword), newPage).map(QuestionListDto::of);
     }
+    public Page<QuestionListDto> getQuestionPage(String keyword, SortOption sortOption, Pageable pageable) {
+        return queryDslQuestionH2Repository.findAll(keyword, pageable, sortOption);
+    }
 
     public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable pageable) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        Page<AnswerDto> answerPage = answerService.getAnswerList(id, pageable, option);
+        Page<AnswerDto> answerPage = answerRepository.findAllByQuestionId(id, pageable, option)
+                .map(AnswerDto::of);
         return QuestionDto.of(question, answerPage);
     }
 
