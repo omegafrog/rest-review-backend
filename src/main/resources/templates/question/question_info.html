@@ -35,7 +35,15 @@
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2" th:text="|${question.answers().getTotalElements()}개의 답변이 있습니다.|"></h5>
-
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            정렬 기준
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="?sortOption=time">최신순</a></li>
+            <li><a class="dropdown-item" href="?sortOption=recommend">추천순</a></li>
+        </ul>
+    </div>
     <div class="card my-3" th:each="answer : ${question.answers()}">
         <a th:id="|answer_${answer.id}|"></a>
         <div class="card-body">
@@ -97,6 +105,9 @@
             </li>
         </ul>
     </div>
+    <form th:action="@{|/sbb/questions/${question.id}/answers}" method="get" id="searchForm">
+        <input type="hidden" id="option" name="option" th:value="${option}"/>
+    </form>
 </div>
 
 <script layout:fragment="script" type='text/javascript'>
@@ -118,6 +129,10 @@
             location.href = this.dataset.uri;
         });
     });
+    const sort_element = document.getElementsByClassName("sort");
+    sort_element[0].addEventListener('click', function () {
+
+    })
 </script>
 
 </html>
