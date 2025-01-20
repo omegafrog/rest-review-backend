@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.relation.AnswerVoter;
 import org.example.sbb.app.domain.user.SiteUser;
@@ -27,6 +28,8 @@ public class Answer {
     private String content;
     @OneToMany(mappedBy = "answer")
     private final List<AnswerVoter> voters = new ArrayList<>();
+    @OneToMany(mappedBy = "targetAnswer")
+    private final List<Comment> comments = new ArrayList<>();
     @Column(name="created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
     @Column(name="modified_at")

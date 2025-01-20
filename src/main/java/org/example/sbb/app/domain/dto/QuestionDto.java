@@ -12,10 +12,11 @@ public record QuestionDto(Long id,
                           SiteUserDto author,
                           Page<AnswerDto> answers,
                           List<SiteUserDto> voters,
+                          Page<CommentDto> comments,
                           LocalDateTime createdAt,
                           LocalDateTime modifiedAt) {
 
-    public static QuestionDto of(Question question, Page<AnswerDto> answers) {
+    public static QuestionDto of(Question question, Page<AnswerDto> answers, Page<CommentDto> comments) {
         return new QuestionDto(
                 question.getId(),
                 question.getSubject(),
@@ -25,6 +26,7 @@ public record QuestionDto(Long id,
                 question.getVoters().stream().map(
                         questionVoter -> SiteUserDto.of(questionVoter.getVoter())
                 ).toList(),
+                comments,
                 question.getCreatedAt(),
                 question.getModifiedAt());
     }

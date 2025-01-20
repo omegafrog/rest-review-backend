@@ -33,13 +33,13 @@ public class AnswerController {
                               @Valid @ModelAttribute(name="form") AnswerForm form,
                               BindingResult bindingResult ,Model model) {
         if(bindingResult.hasErrors()) {
-            QuestionDto dto = questionService.getQuestionInfo(questionId, PageRequest.of(0, 10));
+            QuestionDto dto = questionService.getQuestionInfo(questionId, PageRequest.of(0, 10), PageRequest.of(0, 10));
             List<AnswerDto> answerList = service.getAnswerList(questionId);
             model.addAttribute("question", dto);
             model.addAttribute("answers", answerList);
             return "question/question_info";
         }
-        AnswerDto answerDto = service.writeAnswer(questionId, form.getContent(), SecurityContextHolder.getContext().getAuthentication());
+        AnswerDto answerDto = service.writeAnswer(questionId, form.getContent() );
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 

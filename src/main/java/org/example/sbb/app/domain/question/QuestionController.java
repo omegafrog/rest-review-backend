@@ -4,7 +4,6 @@ package org.example.sbb.app.domain.question;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.sbb.app.domain.answer.AnswerService;
 import org.example.sbb.app.domain.answer.SortOption;
 import org.example.sbb.app.domain.dto.*;
 import org.springframework.data.domain.Page;
@@ -26,13 +25,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class QuestionController {
     private final QuestionService service;
-    private final AnswerService answerService;
 
     @GetMapping
     public String questions(Model model,
                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
                             @RequestParam(name="sortOption", defaultValue = "time") String sortOption,
-                            @PageableDefault(size = 10) Pageable pageable,
+                            @PageableDefault(size = 10 ) Pageable pageable,
                             @ModelAttribute(name="searchForm") SearchForm searchForm) {
         Page<QuestionListDto> all = service.getQuestionPage(keyword, SortOption.of(sortOption), pageable);
 
@@ -46,9 +44,15 @@ public class QuestionController {
     public String question(Model model,
                            @PathVariable Long id,
                            @ModelAttribute(name="form") AnswerForm form,
-                           @PageableDefault(size=5) Pageable pageable,
+                           @RequestParam(name="answer-page", defaultValue = "0") int answerPage,
+                           @RequestParam(name="answer-size", defaultValue = "5") int answerSize,
+                           @RequestParam(name="comment-page", defaultValue = "0") int commentPage,
+                           @RequestParam(name="comment-size", defaultValue = "5") int commentSize,
                            @RequestParam(name="sortOption", defaultValue = "time") String option) {
-        QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), pageable);
+
+        Pageable answerPageable = PageRequest.of(answerPage, answerSize);
+        Pageable commentPageable = PageRequest.of(commentPage, commentSize);
+        QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), answerPageable, commentPageable);
 
         model.addAttribute("question", dto);
         return "question/question_info";
@@ -82,7 +86,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/modify")
     public String modifyQuestionPage(@ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
-        QuestionDto dto = service.getQuestionInfo(id, PageRequest.of(0, 10));
+        QuestionDto dto = service.getQuestionInfo(id, PageRequest.of(0, 10), PageRequest.of(0, 5));
         form.setSubject(dto.subject());
         form.setContent(dto.content());
         return "question/question_write";

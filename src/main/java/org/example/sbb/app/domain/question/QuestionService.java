@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
 import org.example.sbb.app.domain.answer.QueryDslAnswerRepository;
 import org.example.sbb.app.domain.answer.SortOption;
+import org.example.sbb.app.domain.comment.CommentService;
 import org.example.sbb.app.domain.dto.AnswerDto;
+import org.example.sbb.app.domain.dto.CommentDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.dto.QuestionListDto;
 import org.example.sbb.app.domain.question.repository.QueryDslQuestionH2Repository;
@@ -36,6 +38,7 @@ public class QuestionService {
     private final QueryDslQuestionH2Repository queryDslQuestionH2Repository;
     private final QueryDslAnswerRepository answerRepository;
     private final UserService userService;
+    private final CommentService commentService;
 
 
     public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {
@@ -47,17 +50,18 @@ public class QuestionService {
         return queryDslQuestionH2Repository.findAll(keyword, pageable, sortOption);
     }
 
-    public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable pageable) {
+    public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable answerPageable, Pageable commentPageable) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        Page<AnswerDto> answerPage = answerRepository.findAllByQuestionId(id, pageable, option)
+        Page<AnswerDto> answerPage = answerRepository.findAllByQuestionId(id, answerPageable, option)
                 .map(AnswerDto::of);
-        return QuestionDto.of(question, answerPage);
+        Page<CommentDto> comments = commentService.comments(id, commentPageable).map(CommentDto::of);
+        return QuestionDto.of(question, answerPage, comments);
     }
 
-    public QuestionDto getQuestionInfo(Long id, Pageable pageable) {
+    public QuestionDto getQuestionInfo(Long id, Pageable answerPageable, Pageable commentPageable) {
         SortOption option = SortOption.of("time");
-        return getQuestionInfo(id, option, pageable);
+        return getQuestionInfo(id, option, answerPageable, commentPageable);
     }
     public void writeQuestion(String subject, String content, Authentication auth) {
         SiteUser author = userService.findUser(((User) auth.getPrincipal()).getUsername());

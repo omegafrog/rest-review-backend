@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
+import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.example.sbb.app.domain.user.SiteUser;
 
@@ -25,6 +26,8 @@ public class Question {
     private String content;
     @OneToMany(mappedBy = "question")
     private final List<QuestionVoter> voters = new ArrayList<>();
+    @OneToMany(mappedBy = "targetQuestion")
+    private final List<Comment> comments = new ArrayList<>();
     @Column(name = "created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "modified_at")
