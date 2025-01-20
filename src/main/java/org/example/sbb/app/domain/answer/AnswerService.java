@@ -8,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
 import org.example.sbb.app.domain.question.Question;
-import org.example.sbb.app.domain.question.QuestionH2Repository;
+import org.example.sbb.app.domain.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.relation.AnswerVoter;
 import org.example.sbb.app.domain.relation.AnswerVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserH2Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -30,6 +32,7 @@ public class AnswerService {
     private final QuestionH2Repository questionRepository;
     private final UserH2Repository userRepository;
     private final AnswerVoterRepository answerVoterRepository;
+    private final QueryDslAnswerRepository queryDslAnswerRepository;
 
     public AnswerDto writeAnswer(Long questionId, String content, Authentication auth) {
         Question founded = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
@@ -49,6 +52,9 @@ public class AnswerService {
         return question.getAnswers().stream().map(AnswerDto::of).collect(Collectors.toList());
     }
 
+    public Page<AnswerDto> getAnswerList(Long questionId, Pageable pageable, SortOption sortOption){
+        return queryDslAnswerRepository.findAllByQuestionId(questionId, pageable, sortOption).map(AnswerDto::of);
+    }
     public void prepareAnswerForm(Long answerId, AnswerForm form, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(answerId + "인 답변이 없습니다."));
 

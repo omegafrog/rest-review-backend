@@ -4,8 +4,9 @@ package org.example.sbb.app.domain.question;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.sbb.app.domain.dto.*;
 import org.example.sbb.app.domain.answer.AnswerService;
+import org.example.sbb.app.domain.answer.SortOption;
+import org.example.sbb.app.domain.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,11 +42,14 @@ public class QuestionController {
 
 
     @GetMapping("/{id}")
-    public String question(Model model, @PathVariable Long id, @ModelAttribute(name="form") AnswerForm form, @PageableDefault(size=5) Pageable pageable ) {
-        QuestionDto dto = service.getQuestionInfo(id, pageable);
+    public String question(Model model,
+                           @PathVariable Long id,
+                           @ModelAttribute(name="form") AnswerForm form,
+                           @PageableDefault(size=5) Pageable pageable,
+                           @RequestParam(name="sortOption", defaultValue = "time") String option) {
+        QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), pageable);
 
         model.addAttribute("question", dto);
-
         return "question/question_info";
     }
 
