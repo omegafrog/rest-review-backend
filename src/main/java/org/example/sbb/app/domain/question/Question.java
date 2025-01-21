@@ -7,6 +7,9 @@ import org.example.sbb.app.domain.answer.Answer;
 import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.example.sbb.app.domain.user.SiteUser;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 @Entity(name = "QUESTION")
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +33,11 @@ public class Question {
     @OneToMany(mappedBy = "targetQuestion")
     private final List<Comment> comments = new ArrayList<>();
     @Column(name = "created_at")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    @CreatedDate
+    private LocalDateTime createdAt;
     @Column(name = "modified_at")
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private final List<Answer> answers = new ArrayList<>();
     @ManyToOne

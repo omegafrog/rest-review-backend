@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
 import org.example.sbb.app.domain.answer.QueryDslAnswerRepository;
 import org.example.sbb.app.domain.answer.SortOption;
-import org.example.sbb.app.domain.comment.CommentService;
+import org.example.sbb.app.domain.comment.CommentReadService;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.CommentDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
@@ -38,7 +38,7 @@ public class QuestionService {
     private final QueryDslQuestionH2Repository queryDslQuestionH2Repository;
     private final QueryDslAnswerRepository answerRepository;
     private final UserService userService;
-    private final CommentService commentService;
+    private final CommentReadService commentService;
 
 
     public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {

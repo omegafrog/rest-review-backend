@@ -7,6 +7,7 @@ import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id

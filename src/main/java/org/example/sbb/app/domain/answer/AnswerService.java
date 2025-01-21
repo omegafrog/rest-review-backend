@@ -98,4 +98,9 @@ public class AnswerService {
     private static String getUsername(Authentication auth) {
         return ((User) auth.getPrincipal()).getUsername();
     }
+
+    public Answer getAnswer(Long targetId) {
+        return answerRepository.findById(targetId)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find answer entity. "+targetId));
+    }
 }

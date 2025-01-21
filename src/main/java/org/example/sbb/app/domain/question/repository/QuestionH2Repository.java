@@ -1,3 +1,5 @@
+package org.example.sbb.app.domain.question.repository;
+
 import org.example.sbb.app.domain.question.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
