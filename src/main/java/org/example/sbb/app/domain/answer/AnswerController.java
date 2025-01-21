@@ -5,9 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
+import org.example.sbb.app.domain.dto.AnswerListDto;
 import org.example.sbb.app.domain.dto.QuestionDto;
 import org.example.sbb.app.domain.question.QuestionService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,6 +83,13 @@ public class AnswerController {
         Authentication auth = getAuthentication();
         AnswerDto answerDto = service.recommend(answerId, auth);
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
+    }
+
+    @GetMapping("/answers")
+    public String recentAnswers(Model model,@PageableDefault(page = 0, size = 5) Pageable pageable){
+        Page<AnswerListDto> answerPage = service.getAnswerPage(pageable);
+        model.addAttribute("answers", answerPage);
+        return "answer/answer_list";
     }
 
     private static Authentication getAuthentication() {

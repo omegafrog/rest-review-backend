@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.AnswerDto;
 import org.example.sbb.app.domain.dto.AnswerForm;
+import org.example.sbb.app.domain.dto.AnswerListDto;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.question.QuestionService;
 import org.example.sbb.app.domain.relation.AnswerVoter;
@@ -14,7 +15,9 @@ import org.example.sbb.app.domain.relation.AnswerVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,5 +105,10 @@ public class AnswerService {
     public Answer getAnswer(Long targetId) {
         return answerRepository.findById(targetId)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot find answer entity. "+targetId));
+    }
+
+    public Page<AnswerListDto> getAnswerPage(Pageable pageable) {
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("createdAt")));
+        return answerRepository.findAll(newPageable).map(AnswerListDto::of);
     }
 }
