@@ -9,6 +9,9 @@ import org.example.sbb.app.domain.dto.ResetPasswordForm;
 import org.example.sbb.app.global.RecoveryCache;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +83,21 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호 재확인 실패.");
         String encoded = passwordEncoder.encode(form.getPassword1());
         siteUser.resetPassword(encoded );
+    }
+
+    public void reset( ResetPasswordForm form) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if( auth !=null && auth.isAuthenticated() && auth.getPrincipal() instanceof User user){
+            String userId = user.getUsername();
+            SiteUser siteUser = userRepository.findById(userId)
+                    .orElseThrow(EntityNotFoundException::new);
+
+            if(!form.match())
+                throw new IllegalArgumentException("비밀번호 재확인 실패.");
+            String encoded = passwordEncoder.encode(form.getPassword1());
+            siteUser.resetPassword(encoded );
+        }
+        else
+            throw new IllegalArgumentException("User not found");
     }
 }

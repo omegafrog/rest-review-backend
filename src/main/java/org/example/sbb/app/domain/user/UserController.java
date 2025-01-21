@@ -54,14 +54,21 @@ public class UserController {
     }
 
     @GetMapping("/reset")
-    public String resetPasswordPage(Model model, @ModelAttribute(name="form") ResetPasswordForm form, @RequestParam(name="key") String recoveryKey){
+    public String resetPasswordPage(Model model, @ModelAttribute(name="form") ResetPasswordForm form,
+                                    @RequestParam(name="key", defaultValue = "") String recoveryKey){
         model.addAttribute("key", recoveryKey);
         return "auth/reset";
     }
 
+
     @PostMapping("/reset")
-    public String resetPassword(@RequestParam(name="key") String recoveryKey, @ModelAttribute(name="form") ResetPasswordForm form) {
-        userService.reset(recoveryKey, form);
+    public String resetPassword(@RequestParam(name="key", required = false) String recoveryKey,
+                                @ModelAttribute(name="form") ResetPasswordForm form) {
+        if(recoveryKey.isEmpty()){
+            userService.reset(form);
+        }
+        else
+            userService.reset(recoveryKey, form);
         return "auth/reset-success";
     }
 
