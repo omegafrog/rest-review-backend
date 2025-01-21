@@ -12,6 +12,7 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="?sortOption=time">최신순</a></li>
                 <li><a class="dropdown-item" href="?sortOption=recommend">추천순</a></li>
+                <li><a class="dropdown-item" href="?sortOption=recent_answer">최근 답변순</a> </li>
             </ul>
         </div>
         <div class="col-6">
@@ -70,6 +71,7 @@
         </ul>
     </div>
     <form th:action="@{/sbb/questions}" method="get" id="searchForm">
+        <input type="hidden" id="sortOption" name="sortOption" th:value="${sortOption}">
         <input type="hidden" id="kw" name="keyword" th:value="${keyword}">
         <input type="hidden" id="page" name="page" th:value="${paging.number}">
     </form>
@@ -79,6 +81,8 @@
     Array.from(page_elements).forEach(function (element) {
         element.addEventListener('click', function () {
             document.getElementById('page').value = this.dataset.page;
+            document.getElementById('kw').value = document.getElementById('search_kw').value;
+            document.getElementById('sortOption').value=/*[[${sortOption}]]*/
             document.getElementById('searchForm').submit();
         });
     });

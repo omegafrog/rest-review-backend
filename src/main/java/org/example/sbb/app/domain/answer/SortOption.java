@@ -23,7 +23,18 @@ public enum SortOption {
                 }
             };
         }
+    }, RECENT_ANSWER("recent_answer"){
+        @Override
+        public Comparator<Answer> getComparator() {
+            return null;
+        }
+    }, RECENT_COMMENT("recent_comment"){
+        @Override
+        public Comparator<Answer> getComparator() {
+            return null;
+        }
     };
+
 
     private String value;
 

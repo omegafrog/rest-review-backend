@@ -28,6 +28,7 @@ public class QueryDslAnswerRepository {
         OrderSpecifier specifier = switch (sortOption) {
             case TIME -> target.createdAt.desc();
             case RECOMMEND -> voters.answer.count().desc();
+            default -> null;
         };
 
         JPAQuery<Answer> query = factory.selectFrom(target)

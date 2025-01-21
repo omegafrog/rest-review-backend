@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.answer.QAnswer;
 import org.example.sbb.app.domain.answer.SortOption;
 import org.example.sbb.app.domain.dto.QuestionListDto;
 import org.example.sbb.app.domain.dto.SiteUserDto;
@@ -43,12 +44,14 @@ public class QueryDslQuestionH2Repository {
     }
 
     public Page<QuestionListDto> findAll(String keyword, Pageable newPage, SortOption sortOption) {
+        if(sortOption.equals(SortOption.RECENT_ANSWER))
+            return findAllByRecentAnswer(keyword, newPage);
         QQuestion target = QQuestion.question;
         QQuestionVoter voters= QQuestionVoter.questionVoter;
 
         OrderSpecifier order = switch (sortOption) {
-            case TIME -> target.createdAt.desc();
             case RECOMMEND -> voters.question.count().desc();
+            default -> target.createdAt.desc();
         };
 
         JPAQuery<Tuple> query = queryFactory.select(target.id, target.subject, target.author, target.answers.size(), target.createdAt,
@@ -76,5 +79,34 @@ public class QueryDslQuestionH2Repository {
                 .toList();
 
         return new PageImpl<>(fetched, newPage, cnt);
+    }
+
+    private Page<QuestionListDto> findAllByRecentAnswer(String keyword, Pageable newPage) {
+        QQuestion question = QQuestion.question;
+        QAnswer answer = QAnswer.answer;
+        JPAQuery<Tuple> query = queryFactory.select(question.id, question.subject, question.author, question.answers.size(),
+                        question.createdAt, question.voters.size(), answer.createdAt.max())
+                .from(question)
+                .distinct()
+                .leftJoin(question.answers, answer)
+                .leftJoin(question.voters)
+                .leftJoin(question.author, new QSiteUser("author"))
+                .where(question.subject.contains(keyword))
+                .orderBy(answer.createdAt.max().desc());
+
+        long cnt = query.fetchCount();
+        List<QuestionListDto> content = query
+                .offset(newPage.getOffset())
+                .limit(newPage.getPageSize())
+                .fetch().stream().map(item ->
+                new QuestionListDto(
+                        item.get(question.id),
+                        item.get(question.subject),
+                        SiteUserDto.of(item.get(question.author)),
+                        item.get(question.answers.size()),
+                        item.get(question.voters.size()),
+                        item.get(question.createdAt)
+                )).toList();
+        return new PageImpl<>(content, newPage,cnt);
     }
 }

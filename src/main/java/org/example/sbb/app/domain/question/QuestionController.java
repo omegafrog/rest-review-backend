@@ -36,6 +36,7 @@ public class QuestionController {
 
         model.addAttribute("paging", all);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("sortOption", sortOption);
         return "question/question_list";
     }
 
