@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.ResetPasswordForm;
+import org.example.sbb.app.domain.dto.SiteUserInfoDto;
 import org.example.sbb.app.global.RecoveryCache;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -99,5 +100,13 @@ public class UserService {
         }
         else
             throw new IllegalArgumentException("User not found");
+    }
+
+    public SiteUserInfoDto getUserInfo() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String id= user.getUsername();
+        SiteUser siteUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return SiteUserInfoDto.of(siteUser);
     }
 }

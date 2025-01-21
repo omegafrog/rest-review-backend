@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +35,9 @@ public class AnswerService {
     private final QuestionService questionService;
     private final UserService userService;
 
-    public AnswerDto writeAnswer(Long questionId, String content, Authentication auth) {
+    public AnswerDto writeAnswer(Long questionId, String content) {
         // TODO : service layer에서는 dto를 리턴하는데, 다른 도메인의 서비스에서 엔티티 객체 자체가 필요한 경우가 있다. 이 경우 어떻게하는가?
+        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
         Question founded = questionService.getQuestion(questionId);
         SiteUser author = userService.findUser(getUsername(auth));
         Answer answer = new Answer(founded, content, author);

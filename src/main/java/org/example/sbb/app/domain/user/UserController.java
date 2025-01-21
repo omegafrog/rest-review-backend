@@ -2,10 +2,8 @@ package org.example.sbb.app.domain.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.domain.dto.CreateUserForm;
-import org.example.sbb.app.domain.dto.LoginUserForm;
-import org.example.sbb.app.domain.dto.RecoveryForm;
-import org.example.sbb.app.domain.dto.ResetPasswordForm;
+import org.example.sbb.app.domain.dto.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -72,5 +70,11 @@ public class UserController {
         return "auth/reset-success";
     }
 
-
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("")
+    public String userInfo(Model model) {
+        SiteUserInfoDto userInfo = userService.getUserInfo();
+        model.addAttribute("user", userInfo);
+        return "auth/user-info";
+    }
 }

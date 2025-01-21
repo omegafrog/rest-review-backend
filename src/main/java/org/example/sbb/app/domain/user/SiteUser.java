@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.answer.Answer;
+import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.relation.AnswerVoter;
 import org.example.sbb.app.domain.relation.QuestionVoter;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +27,22 @@ public class SiteUser {
     private String email;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
-    private List<Question> wroteQuestions = new ArrayList<>();
+    private final List<Question> wroteQuestions = new ArrayList<>();
 
     @OneToMany(mappedBy = "author",cascade = CascadeType.REMOVE)
-    private List<Answer> wroteAnswers = new ArrayList<>();
+    private final List<Answer> wroteAnswers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
+    private final List<Comment> wroteComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "voter", cascade = CascadeType.REMOVE)
-    private List<QuestionVoter> votedQuestions = new ArrayList<>();
+    private final List<QuestionVoter> votedQuestions = new ArrayList<>();
 
     @OneToMany(mappedBy = "voter", cascade = CascadeType.REMOVE)
-    private List<AnswerVoter> votedAnswers = new ArrayList<>();
+    private final List<AnswerVoter> votedAnswers = new ArrayList<>();
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public SiteUser(String id, String password, String email) {
         this.id = id;
