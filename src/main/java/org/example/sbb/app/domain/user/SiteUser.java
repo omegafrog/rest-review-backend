@@ -9,6 +9,7 @@ import org.example.sbb.app.domain.question.Question;
 import org.example.sbb.app.domain.relation.AnswerVoter;
 import org.example.sbb.app.domain.relation.QuestionVoter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name="MEMBER")
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class SiteUser {
     @Id
@@ -42,6 +44,7 @@ public class SiteUser {
     private final List<AnswerVoter> votedAnswers = new ArrayList<>();
 
     @CreatedDate
+    @Column(name="created_at")
     private LocalDateTime createdAt;
 
     public SiteUser(String id, String password, String email) {
