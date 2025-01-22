@@ -53,6 +53,7 @@ public class QuestionService {
     public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable answerPageable, Pageable commentPageable) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
+        question.increaseViewCount();
         Page<AnswerDto> answerPage = answerRepository.findAllByQuestionId(id, answerPageable, option)
                 .map(AnswerDto::of);
         Page<CommentDto> comments = commentService.comments(id, commentPageable).map(CommentDto::of);

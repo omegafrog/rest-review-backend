@@ -13,6 +13,7 @@ public record QuestionDto(Long id,
                           Page<AnswerDto> answers,
                           List<SiteUserDto> voters,
                           Page<CommentDto> comments,
+                          Integer viewCount,
                           LocalDateTime createdAt,
                           LocalDateTime modifiedAt) {
 
@@ -27,6 +28,7 @@ public record QuestionDto(Long id,
                         questionVoter -> SiteUserDto.of(questionVoter.getVoter())
                 ).toList(),
                 comments,
+                question.getViewCount(),
                 question.getCreatedAt(),
                 question.getModifiedAt());
     }

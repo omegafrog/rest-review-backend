@@ -32,6 +32,9 @@ public class Question {
     private final List<QuestionVoter> voters = new ArrayList<>();
     @OneToMany(mappedBy = "targetQuestion")
     private final List<Comment> comments = new ArrayList<>();
+    @Column(name="view_count")
+    private Integer viewCount;
+
     @Column(name = "created_at")
     @CreatedDate
     private LocalDateTime createdAt;
@@ -48,6 +51,7 @@ public class Question {
         this.subject = subject;
         this.content = content;
         this.author = author;
+        this.viewCount = 0;
         author.addWroteQuestion(this);
     }
 
@@ -67,6 +71,10 @@ public class Question {
         voters.add(questionVoter);
         voter.getVotedQuestions().add(questionVoter);
         return questionVoter;
+    }
+
+    public synchronized int increaseViewCount() {
+        return this.viewCount+=1;
     }
 
     @Override
