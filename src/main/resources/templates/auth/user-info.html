@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="card my-3">
+        <div class="card-header"><h3 class="text-center">User Information</h3></div>
+        <div class="card-body">
+            <!-- User Information -->
+            <div class="mb-4">
+                <h4 class="text-primary">User Details</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">Id: <span th:text="${user.id}"></span></li>
+                    <li class="list-group-item">Email: <span th:text="${user.email}"></span></li>
+                    <li class="list-group-item">Join Date: <span th:text="${user.createdAt}"></span></li>
+                </ul>
+            </div>
+
+            <!-- Questions Section -->
+            <div class="mb-4">
+                <h4 class="text-primary">Questions</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="question : ${user.wroteQuestion}">
+                        <strong th:text="${question.subject()}"></strong>
+                        <br/>
+                        <small class="text-muted">Created at: <span th:text="${question.createdAt}"></span></small>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Answers Section -->
+            <div class="mb-4">
+                <h4 class="text-primary">Answers</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="answer : ${user.wroteAnswer}">
+                        <p th:text="${answer.content}" class="mb-0"></p>
+                        <small class="text-muted">Answered at: <span th:text="${answer.createdAt}"></span></small>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mb-4">
+                <h4 class="text-primary">Comments</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="comment : ${user.wroteComment}">
+                        <p th:text="${comment.content}" class="mb-0"></p>
+                        <small class="text-muted">Commented at: <span th:text="${comment.createdAt}"></span></small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
