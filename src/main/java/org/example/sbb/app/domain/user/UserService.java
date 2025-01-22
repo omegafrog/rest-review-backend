@@ -2,6 +2,7 @@ package org.example.sbb.app.domain.user;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class UserService {
     private final JavaMailSender mailSender;
 
     public SiteUser register(String id, String password1, String password2 , String email){
+        if(userRepository.findById(id).isPresent()) throw new EntityExistsException("User with id " + id + " already exists");
         if(!password1.equals(password2)) throw new IllegalArgumentException("Passwords do not match");
         return userRepository.save(new SiteUser(id, passwordEncoder.encode(password1), email));
     }
