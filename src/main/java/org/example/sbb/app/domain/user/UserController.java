@@ -77,4 +77,10 @@ public class UserController {
         model.addAttribute("user", userInfo);
         return "auth/user-info";
     }
+
+    @GetMapping("/google/login")
+    public String googleLogin(){
+        return "auth/google-login";
+    }
+
 }
