@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.dto.ResetPasswordForm;
 import org.example.sbb.app.domain.dto.SiteUserInfoDto;
-import org.example.sbb.app.global.RecoveryCache;
+import org.example.sbb.app.global.security.RecoveryCache;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -35,7 +35,7 @@ public class UserService {
         return userRepository.save(new SiteUser(id, passwordEncoder.encode(password1), email));
     }
 
-    public SiteUser findUser(String username) {
+    public SiteUser findUserById(String username) {
         return userRepository.findById(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
@@ -110,5 +110,14 @@ public class UserService {
         SiteUser siteUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return SiteUserInfoDto.of(siteUser);
+    }
+
+    public SiteUser findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(()-> new EntityNotFoundException("User not found"));
+    }
+
+    public boolean exist(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

@@ -1,11 +1,11 @@
 package org.example.sbb.app;
 
 import org.example.sbb.app.domain.user.UserH2Repository;
-import org.example.sbb.app.domain.user.UserSecurityService;
 import org.example.sbb.app.domain.user.UserService;
-import org.example.sbb.app.global.Oauth2AuthenticationSuccessHandler;
-import org.example.sbb.app.global.SiteUserOidcUserService;
-import org.example.sbb.app.global.UserAuthenticationManager;
+import org.example.sbb.app.global.security.Oauth2AuthenticationSuccessHandler;
+import org.example.sbb.app.global.security.SiteUserOidcUserService;
+import org.example.sbb.app.global.security.UserAuthenticationManager;
+import org.example.sbb.app.global.security.UserSecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

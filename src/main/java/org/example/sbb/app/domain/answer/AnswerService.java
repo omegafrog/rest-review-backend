@@ -42,7 +42,7 @@ public class AnswerService {
         // TODO : service layer에서는 dto를 리턴하는데, 다른 도메인의 서비스에서 엔티티 객체 자체가 필요한 경우가 있다. 이 경우 어떻게하는가?
         Authentication auth= SecurityContextHolder.getContext().getAuthentication();
         Question founded = questionService.getQuestion(questionId);
-        SiteUser author = userService.findUser(getUsername(auth));
+        SiteUser author = userService.findUserById(getUsername(auth));
         Answer answer = new Answer(founded, content, author);
         return AnswerDto.of(answerRepository.save(answer));
     }
@@ -84,7 +84,7 @@ public class AnswerService {
 
     public AnswerDto recommend(Long answerId, Authentication auth) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
-        SiteUser voter = userService.findUser(getUsername(auth));
+        SiteUser voter = userService.findUserById(getUsername(auth));
 
         if(isAuthor(auth, answer))
             throw new RuntimeException("자신의 글을 추천할 수 없습니다.");

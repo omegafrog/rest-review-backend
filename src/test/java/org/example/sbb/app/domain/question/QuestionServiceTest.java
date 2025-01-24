@@ -51,7 +51,7 @@ class QuestionServiceTest {
         SiteUser author = new SiteUser("user", "encodedPassword", "email@email.com");
         Question question = new Question("sub", "content", author);
 
-        Mockito.when(userService.findUser("user"))
+        Mockito.when(userService.findUserById("user"))
                 .thenReturn(author);
 
         Mockito.when(repository.save(Mockito.any(Question.class)))

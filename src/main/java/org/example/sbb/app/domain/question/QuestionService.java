@@ -65,7 +65,7 @@ public class QuestionService {
         return getQuestionInfo(id, option, answerPageable, commentPageable);
     }
     public void writeQuestion(String subject, String content, Authentication auth) {
-        SiteUser author = userService.findUser(((User) auth.getPrincipal()).getUsername());
+        SiteUser author = userService.findUserById(((User) auth.getPrincipal()).getUsername());
         Question question = new Question(subject, content, author);
         repository.save(question);
     }
@@ -93,7 +93,7 @@ public class QuestionService {
     public void recommend(Long id, Authentication auth) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        SiteUser voter = userService.findUser(((User) auth.getPrincipal()).getUsername());
+        SiteUser voter = userService.findUserById(((User) auth.getPrincipal()).getUsername());
 
         if (question.getAuthor().equals(voter))
             throw new RuntimeException("자신의 글은 추천할 수 없습니다.");

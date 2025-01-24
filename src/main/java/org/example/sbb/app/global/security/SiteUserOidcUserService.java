@@ -1,4 +1,4 @@
-package org.example.sbb.app.global;
+package org.example.sbb.app.global.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

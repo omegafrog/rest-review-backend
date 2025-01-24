@@ -1,4 +1,4 @@
-package org.example.sbb.app.domain.user;
+package org.example.sbb.app.global.security;
 
 public enum UserRole {
     USER("ROLE_USER"), ADMIN("ROLE_ADMIN");

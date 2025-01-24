@@ -1,7 +1,7 @@
 package org.example.sbb.app;
 
-import org.example.sbb.app.global.Oauth2AuthenticationSuccessHandler;
-import org.example.sbb.app.global.UserAuthenticationManager;
+import org.example.sbb.app.global.security.Oauth2AuthenticationSuccessHandler;
+import org.example.sbb.app.global.security.UserAuthenticationManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

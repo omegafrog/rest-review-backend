@@ -25,7 +25,7 @@ public class CommentService{
     public void writeComment(CommentForm form, String targetName, Long targetId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth!=null && auth.isAuthenticated() && auth.getPrincipal() instanceof User user){
-            SiteUser author= userService.findUser(user.getUsername());
+            SiteUser author= userService.findUserById(user.getUsername());
 
             Comment.CommentBuilder commentBuilder = switch (targetName) {
                 case "questions" -> writeToQuestion(targetId);
