@@ -7,5 +7,6 @@ import lombok.Getter;
 @Getter
 public class ApiResponse {
     private String code;
+    private String message;
     private Object data;
 }

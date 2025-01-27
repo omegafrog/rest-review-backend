@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -60,6 +61,21 @@ public class SecurityConfig {
     }
 
     @Bean
+    public SecurityFilterChain questionApiChain(HttpSecurity http, UserAuthenticationManager authenticationManager,
+                                             OAuth2UserService siteUserOidcUserService,
+                                             Oauth2AuthenticationSuccessHandler oauth2SuccessHandler) throws Exception {
+        http
+                .authenticationManager(authenticationManager)
+                .securityMatcher("/sbb/v1/questions/**")
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(HttpMethod.POST, "/sbb/v1/questions")
+                                .hasRole("USER")
+                                .anyRequest().permitAll());
+        http = baseOptions(http, siteUserOidcUserService, oauth2SuccessHandler);
+        return http.build();
+    }
+    @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer configureH2ConsoleEnable() {
         return web -> web.ignoring()
@@ -70,6 +86,7 @@ public class SecurityConfig {
                                      AuthenticationSuccessHandler authenticationSuccessHandler) throws Exception {
         return http
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+                .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/sbb/user/login")
@@ -82,9 +99,9 @@ public class SecurityConfig {
                                         .logoutSuccessUrl("/sbb/questions")
                                         .invalidateHttpSession(true)
                 )
-                .oauth2Login(oauth2->oauth2
+                .oauth2Login(oauth2 -> oauth2
                         .loginPage("/sbb/user/google/login")
-                        .userInfoEndpoint(userInfo->
+                        .userInfoEndpoint(userInfo ->
                                 userInfo.oidcUserService(siteUserOidcUserService))
                         .successHandler(authenticationSuccessHandler));
 

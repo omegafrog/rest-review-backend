@@ -1,6 +1,7 @@
 package org.example.sbb.app.domain.question.question;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class QuestionApiControllerV1 {
                             @PageableDefault(size = 10 ) Pageable pageable) {
         return new ApiResponse(
                 HttpStatus.OK.toString(),
+                "get questions success.",
                 service.getQuestionPage(keyword, SortOption.of(sortOption), pageable));
     }
 
@@ -48,23 +50,24 @@ public class QuestionApiControllerV1 {
         Pageable commentPageable = PageRequest.of(commentPage, commentSize);
         QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), answerPageable, commentPageable);
 
-        return new ApiResponse(HttpStatus.OK.toString(), dto);
+        return new ApiResponse(HttpStatus.OK.toString(), "get question success.", dto);
     }
 
-    @GetMapping("/write")
-    public String writeQuestionPage(@ModelAttribute(name="form") QuestionForm form) {
-        return "question/question_write";
-    }
+//    @GetMapping("/write")
+//    public String writeQuestionPage(@RequestBody QuestionForm form) {
+//        return "question/question_write";
+//    }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/write")
-    public String writeQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, BindingResult bindingResult) {
+    @PostMapping("")
+    public ApiResponse writeQuestion(@Valid @RequestBody QuestionForm form, BindingResult bindingResult,
+                                     HttpServletResponse response) {
         Authentication auth = getAuthentication();
         if(bindingResult.hasErrors()) {
-            return "question/question_write";
+            return new ApiResponse(HttpStatus.BAD_REQUEST.toString(), "write question failed.",bindingResult);
         }
         service.writeQuestion(form.getSubject(), form.getContent(), auth);
-        return "redirect:write/confirm";
+        return new ApiResponse(HttpStatus.OK.toString(),"write question success.", "write question successful");
     }
 
     private static Authentication getAuthentication() {
