@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -52,12 +53,20 @@ public class SecurityApiConfig {
                         logout ->
                                 logout.logoutRequestMatcher(new AntPathRequestMatcher("/sbb/v1/user/logout"))
                                         .invalidateHttpSession(true)
-                );
-//                .oauth2Login(oauth2 -> oauth2
-//                        .loginPage("/sbb/user/google/login")
-//                        .userInfoEndpoint(userInfo ->
-//                                userInfo.oidcUserService(siteUserOidcUserService))
-//                        .successHandler(authenticationSuccessHandler));
-
+                )
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint((request, response, authException) -> {
+                            if (authException instanceof AuthenticationException) {
+                                response.getWriter().write(
+                                        new ObjectMapper().writeValueAsString(
+                                                new ApiResponse(HttpStatus.UNAUTHORIZED.toString(), "Authentication required", null)
+                                        )
+                                );
+                            } else {
+                                response.getWriter().write(
+                                        new ObjectMapper().writeValueAsString(
+                                                new ApiResponse(HttpStatus.FORBIDDEN.toString(), "", null)));
+                            }
+                        }));
     }
 }

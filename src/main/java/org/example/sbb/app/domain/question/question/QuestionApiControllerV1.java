@@ -75,31 +75,19 @@ public class QuestionApiControllerV1 {
         return auth;
     }
 
-    @GetMapping("/write/confirm")
-    public String writeConfirmPage() {
-       return "question/write_confirm";
-    }
-
-    @GetMapping("/{id}/modify")
-    public String modifyQuestionPage(@ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
-        QuestionDto dto = service.getQuestionInfo(id, PageRequest.of(0, 10), PageRequest.of(0, 5));
-        form.setSubject(dto.subject());
-        form.setContent(dto.content());
-        return "question/question_write";
-    }
-    @PostMapping("/{id}/modify")
-    public String modifyQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
+    @PatchMapping("/{id}")
+    public ApiResponse modifyQuestion(@Valid @RequestBody QuestionForm form, @PathVariable Long id) {
         Authentication auth = getAuthentication();
         service.modify(id, form.getSubject(), form.getContent(), auth);
-        return "redirect:/sbb/questions/"+id;
+        return new ApiResponse(HttpStatus.OK.toString(), "update question success.", null);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/delete")
-    public String deleteQuestion( @PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ApiResponse deleteQuestion( @PathVariable Long id) {
         Authentication auth = getAuthentication();
         service.delete(id, auth);
-        return "redirect:/sbb/questions";
+        return new ApiResponse(HttpStatus.OK.toString(), "delete question success.", null);
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/recommend")

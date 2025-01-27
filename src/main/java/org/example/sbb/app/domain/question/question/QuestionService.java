@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -78,7 +79,10 @@ public class QuestionService {
     }
 
     private String getId(Authentication auth) {
-        return ((User) auth.getPrincipal()).getUsername();
+        if(auth.getPrincipal() instanceof User)
+            return ((User) auth.getPrincipal()).getUsername();
+        else
+            throw new AccessDeniedException("Login needed.");
     }
 
     public void delete(Long id, Authentication auth) {
