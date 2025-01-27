@@ -3,6 +3,7 @@ package org.example.sbb.app.domain.question.answer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.sbb.app.domain.comment.Comment;
@@ -32,7 +33,7 @@ public class Answer {
     private String content;
     @OneToMany(mappedBy = "answer")
     private final List<AnswerVoter> voters = new ArrayList<>();
-    @OneToMany(mappedBy = "targetAnswer")
+    @OneToMany(mappedBy = "targetAnswer", cascade = CascadeType.REMOVE)
     private final List<Comment> comments = new ArrayList<>();
     @Column(name="created_at")
     @CreatedDate
@@ -44,6 +45,7 @@ public class Answer {
     @JoinColumn(name="author_id")
     private SiteUser author;
 
+    @Builder
     public Answer( Question question, String content, SiteUser author) {
         this.question = question;
         this.content = content;
