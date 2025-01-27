@@ -1,7 +1,10 @@
 package org.example.sbb.app.domain.comment;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.user.SiteUser;
@@ -14,8 +17,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
-@Builder
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
@@ -38,5 +39,17 @@ public class Comment {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
+    @Builder
+    public Comment(String content, SiteUser author, Question targetQuestion, Answer targetAnswer) {
+        this.content = content;
+        this.author = author;
+        this.targetQuestion = targetQuestion;
+        this.targetAnswer = targetAnswer;
 
+        if(targetQuestion!=null)
+            targetQuestion.getComments().add(this);
+        if(targetAnswer!=null)
+            targetAnswer.getComments().add(this);
+        author.getWroteComments().add(this);
+    }
 }

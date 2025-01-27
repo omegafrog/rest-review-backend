@@ -3,8 +3,8 @@ package org.example.sbb.app.domain.question.question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.comment.Comment;
+import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.question.recommend.QuestionVoter;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,9 +28,9 @@ public class Question {
     private String subject;
     @Column(name = "content")
     private String content;
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question" )
     private final List<QuestionVoter> voters = new ArrayList<>();
-    @OneToMany(mappedBy = "targetQuestion")
+    @OneToMany(mappedBy = "targetQuestion", cascade=CascadeType.REMOVE, orphanRemoval = true)
     private final List<Comment> comments = new ArrayList<>();
     @Column(name="view_count")
     private Integer viewCount;
