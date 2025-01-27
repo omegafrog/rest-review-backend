@@ -4,7 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.domain.relation.QAnswerVoter;
+import org.example.sbb.app.domain.question.recommend.QAnswerVoter;
 import org.example.sbb.app.domain.user.QSiteUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
