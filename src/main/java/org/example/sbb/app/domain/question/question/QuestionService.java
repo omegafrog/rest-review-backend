@@ -4,12 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.comment.CommentReadService;
+import org.example.sbb.app.domain.comment.dto.CommentDto;
 import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.question.answer.QueryDslAnswerRepository;
 import org.example.sbb.app.domain.question.answer.SortOption;
-import org.example.sbb.app.domain.comment.CommentReadService;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
-import org.example.sbb.app.domain.comment.dto.CommentDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionListDto;
 import org.example.sbb.app.domain.question.question.repository.QueryDslQuestionH2Repository;
@@ -52,7 +52,7 @@ public class QuestionService {
 
     public QuestionDto getQuestionInfo(Long id, SortOption option, Pageable answerPageable, Pageable commentPageable) {
         Question question = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(()->new EntityNotFoundException("Question not found"));
         question.increaseViewCount();
         Page<AnswerDto> answerPage = answerRepository.findAllByQuestionId(id, answerPageable, option)
                 .map(AnswerDto::of);

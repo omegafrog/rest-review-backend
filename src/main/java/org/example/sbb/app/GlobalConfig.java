@@ -9,13 +9,17 @@ import org.example.sbb.app.global.security.UserSecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
 @Configuration
 @EnableJpaAuditing
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class GlobalConfig {
 
     @Bean

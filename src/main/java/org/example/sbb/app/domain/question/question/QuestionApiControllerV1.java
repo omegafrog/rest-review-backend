@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.question.answer.SortOption;
-import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionForm;
 import org.example.sbb.app.global.security.ApiResponse;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +37,7 @@ public class QuestionApiControllerV1 {
 
 
     @GetMapping("/{id}")
-    public String question(Model model,
-                           @PathVariable Long id,
-                           @ModelAttribute(name="form") AnswerForm form,
+    public ApiResponse question(@PathVariable Long id,
                            @RequestParam(name="answer-page", defaultValue = "0") int answerPage,
                            @RequestParam(name="answer-size", defaultValue = "5") int answerSize,
                            @RequestParam(name="comment-page", defaultValue = "0") int commentPage,
@@ -52,8 +48,7 @@ public class QuestionApiControllerV1 {
         Pageable commentPageable = PageRequest.of(commentPage, commentSize);
         QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), answerPageable, commentPageable);
 
-        model.addAttribute("question", dto);
-        return "question/question_info";
+        return new ApiResponse(HttpStatus.OK.toString(), dto);
     }
 
     @GetMapping("/write")
