@@ -2,8 +2,10 @@ package org.example.sbb.app.domain.question;
 
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
-import org.example.sbb.app.domain.dto.QuestionDto;
-import org.example.sbb.app.domain.question.repository.QuestionH2Repository;
+import org.example.sbb.app.domain.question.question.dto.QuestionDto;
+import org.example.sbb.app.domain.question.question.Question;
+import org.example.sbb.app.domain.question.question.QuestionService;
+import org.example.sbb.app.domain.question.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
 import org.example.sbb.util.Util;

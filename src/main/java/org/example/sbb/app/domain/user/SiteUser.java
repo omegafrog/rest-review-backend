@@ -3,11 +3,11 @@ package org.example.sbb.app.domain.user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.sbb.app.domain.answer.Answer;
+import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.comment.Comment;
-import org.example.sbb.app.domain.question.Question;
-import org.example.sbb.app.domain.relation.AnswerVoter;
-import org.example.sbb.app.domain.relation.QuestionVoter;
+import org.example.sbb.app.domain.question.question.Question;
+import org.example.sbb.app.domain.question.recommend.AnswerVoter;
+import org.example.sbb.app.domain.question.recommend.QuestionVoter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

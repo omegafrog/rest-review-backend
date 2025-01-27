@@ -1,11 +1,11 @@
 package org.example.sbb.app.domain.comment;
 
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.domain.answer.Answer;
-import org.example.sbb.app.domain.answer.AnswerService;
-import org.example.sbb.app.domain.dto.CommentForm;
-import org.example.sbb.app.domain.question.Question;
-import org.example.sbb.app.domain.question.QuestionReadService;
+import org.example.sbb.app.domain.question.answer.Answer;
+import org.example.sbb.app.domain.question.answer.AnswerService;
+import org.example.sbb.app.domain.comment.dto.CommentForm;
+import org.example.sbb.app.domain.question.question.Question;
+import org.example.sbb.app.domain.question.question.QuestionReadService;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
 import org.springframework.security.core.Authentication;

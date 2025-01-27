@@ -2,7 +2,7 @@ package org.example.sbb.app.domain.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.domain.dto.*;
+import org.example.sbb.app.domain.user.dto.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
