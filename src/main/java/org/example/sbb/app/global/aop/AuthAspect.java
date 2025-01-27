@@ -1,0 +1,36 @@
+package org.example.sbb.app.global.aop;
+
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.example.sbb.app.domain.question.question.QuestionService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class AuthAspect {
+
+    @Pointcut("execution(* org.example.sbb.app.domain.question.question.QuestionService.modify(..))")
+    public void modify(){}
+
+    @Around("modify()")
+    public Object aroundModify(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        QuestionService target = (QuestionService) joinPoint.getTarget();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if( auth.getPrincipal() instanceof User user){
+            target.setUserId(user.getUsername());
+        }else{
+            throw new UsernameNotFoundException("Need login");
+        }
+        return joinPoint.proceed();
+    }
+
+}

@@ -56,16 +56,16 @@ public class SecurityApiConfig {
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
                             if (authException instanceof AuthenticationException) {
                                 response.getWriter().write(
                                         new ObjectMapper().writeValueAsString(
-                                                new ApiResponse(HttpStatus.UNAUTHORIZED.toString(), "Authentication required", null)
-                                        )
-                                );
+                                                new ApiResponse(HttpStatus.FORBIDDEN.toString(), "올바르지 않은 권한입니다.", null)));
                             } else {
                                 response.getWriter().write(
                                         new ObjectMapper().writeValueAsString(
-                                                new ApiResponse(HttpStatus.FORBIDDEN.toString(), "", null)));
+                                                new ApiResponse(HttpStatus.UNAUTHORIZED.toString(), "Authentication required", null)));
                             }
                         }));
     }

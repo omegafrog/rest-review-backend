@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.example.sbb.app.domain.comment.CommentReadService;
 import org.example.sbb.app.domain.comment.dto.CommentDto;
 import org.example.sbb.app.domain.question.answer.Answer;
@@ -41,6 +42,8 @@ public class QuestionService {
     private final UserService userService;
     private final CommentReadService commentService;
 
+    @Setter
+    private String userId;
 
     public Page<QuestionListDto> getQuestionPage(String keyword, Pageable pageable) {
         Pageable newPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
@@ -74,7 +77,7 @@ public class QuestionService {
     public void modify(Long id, String updatedSubject, String updatedContent, Authentication auth) {
         Question question = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         question.update(updatedSubject, updatedContent);
-        if (!question.getAuthor().getId().equals(getId(auth)))
+        if (!question.getAuthor().getId().equals(userId))
             throw new UsernameNotFoundException(question.getAuthor().getId() + "인 유저를 찾을 수 없습니다.");
     }
 
