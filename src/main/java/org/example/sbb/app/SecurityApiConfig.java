@@ -44,7 +44,7 @@ public class SecurityApiConfig {
                                         response.setContentType("application/json");
                                         response.getWriter().write(
                                                 new ObjectMapper()
-                                                        .writeValueAsString(new ApiResponse(HttpStatus.OK.toString(), "login success", null)));
+                                                        .writeValueAsString(new ApiResponse(HttpStatus.OK, "login success", null)));
                                     }
                                 })
                                 .usernameParameter("id")
@@ -61,11 +61,11 @@ public class SecurityApiConfig {
                             if (authException instanceof AuthenticationException) {
                                 response.getWriter().write(
                                         new ObjectMapper().writeValueAsString(
-                                                new ApiResponse(HttpStatus.FORBIDDEN.toString(), "올바르지 않은 권한입니다.", null)));
+                                                new ApiResponse(HttpStatus.FORBIDDEN, "올바르지 않은 권한입니다.", null)));
                             } else {
                                 response.getWriter().write(
                                         new ObjectMapper().writeValueAsString(
-                                                new ApiResponse(HttpStatus.UNAUTHORIZED.toString(), "Authentication required", null)));
+                                                new ApiResponse(HttpStatus.UNAUTHORIZED, "Authentication required", null)));
                             }
                         }));
     }

@@ -13,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,8 +51,7 @@ public class AnswerController {
                                    @ModelAttribute(name="form") AnswerForm form,
                                    Model model) {
         log.debug("{}, {}", questionId, answerId);
-        Authentication auth = getAuthentication();
-        service.prepareAnswerForm(answerId, form, auth);
+        service.prepareAnswerForm(answerId, form);
         model.addAttribute("questionId", questionId);
         model.addAttribute("answerId", answerId);
         return "answer/answer_form";
@@ -65,23 +62,20 @@ public class AnswerController {
     public String modifyingAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId,
                                   @ModelAttribute(name="form") AnswerForm form){
         log.info("{}, {}", questionId, answerId);
-        Authentication auth = getAuthentication();
-        AnswerDto answerDto = service.modify(answerId, form.getContent(), auth);
+        AnswerDto answerDto = service.modify(answerId, form.getContent());
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/questions/{question-id}/answers/{answer-id}/delete")
     public String deleteAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
-        Authentication auth = getAuthentication();
-        service.delete(answerId, auth);
+        service.delete(answerId);
         return "redirect:/sbb/questions/"+questionId;
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/questions/{question-id}/answers/{answer-id}/recommend")
     public String recommendAnswer(@PathVariable(name="question-id") Long questionId, @PathVariable(name="answer-id") Long answerId){
-        Authentication auth = getAuthentication();
-        AnswerDto answerDto = service.recommend(answerId, auth);
+        AnswerDto answerDto = service.recommend(answerId);
         return "redirect:/sbb/questions/"+questionId+"#answer_"+answerDto.id();
     }
 
@@ -92,8 +86,4 @@ public class AnswerController {
         return "answer/answer_list";
     }
 
-    private static Authentication getAuthentication() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth;
-    }
 }

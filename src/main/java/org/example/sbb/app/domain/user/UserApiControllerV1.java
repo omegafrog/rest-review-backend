@@ -3,7 +3,6 @@ package org.example.sbb.app.domain.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.sbb.app.domain.user.dto.CreateUserForm;
-import org.example.sbb.app.domain.user.dto.RecoveryForm;
 import org.example.sbb.app.domain.user.dto.ResetPasswordForm;
 import org.example.sbb.app.domain.user.dto.SiteUserInfoDto;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,14 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/sbb/v1/user")
 @RequiredArgsConstructor
-public class UserApiController {
+public class UserApiControllerV1 {
 
     private final UserService userService;
 
-    @GetMapping("/register")
-    public String registerPage(@ModelAttribute(name="form") CreateUserForm form){
-        return "auth/register";
-    }
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute(name="form") CreateUserForm form, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -30,15 +25,6 @@ public class UserApiController {
         }
         userService.register(form.getId(), form.getPassword1(), form.getPassword2(), form.getEmail());
         return "auth/success";
-    }
-
-
-    @GetMapping("/recovery")
-    public String recoveryPasswordPage(@ModelAttribute(name="form") RecoveryForm form,
-                                       @RequestParam(defaultValue = "") String mode) {
-        if(mode.equals("confirm"))
-            return "auth/recovery_confirm";
-        return "auth/recovery";
     }
 
     @PostMapping("/recovery")
@@ -53,7 +39,6 @@ public class UserApiController {
         model.addAttribute("key", recoveryKey);
         return "auth/reset";
     }
-
 
     @PostMapping("/reset")
     public String resetPassword(@RequestParam(name="key", required = false) String recoveryKey,

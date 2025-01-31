@@ -30,7 +30,7 @@ public class QuestionApiControllerV1 {
                             @RequestParam(name="sortOption", defaultValue = "time") String sortOption,
                             @PageableDefault(size = 10 ) Pageable pageable) {
         return new ApiResponse(
-                HttpStatus.OK.toString(),
+                HttpStatus.OK,
                 "get questions success.",
                 service.getQuestionPage(keyword, SortOption.of(sortOption), pageable));
     }
@@ -48,30 +48,30 @@ public class QuestionApiControllerV1 {
         Pageable commentPageable = PageRequest.of(commentPage, commentSize);
         QuestionDto dto = service.getQuestionInfo(id, SortOption.of(option), answerPageable, commentPageable);
 
-        return new ApiResponse(HttpStatus.OK.toString(), "get question success.", dto);
+        return new ApiResponse(HttpStatus.OK, "get question success.", dto);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("")
     public ApiResponse writeQuestion(@Valid @RequestBody QuestionForm form, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return new ApiResponse(HttpStatus.BAD_REQUEST.toString(), "write question failed.",bindingResult);
+            return new ApiResponse(HttpStatus.BAD_REQUEST, "write question failed.",bindingResult);
         }
         service.writeQuestion(form.getSubject(), form.getContent());
-        return new ApiResponse(HttpStatus.OK.toString(),"write question success.", "write question successful");
+        return new ApiResponse(HttpStatus.OK,"write question success.", "write question successful");
     }
 
     @PatchMapping("/{id}")
     public ApiResponse modifyQuestion(@Valid @RequestBody QuestionForm form, @PathVariable Long id) {
         service.modify(id, form.getSubject(), form.getContent());
-        return new ApiResponse(HttpStatus.OK.toString(), "update question success.", null);
+        return new ApiResponse(HttpStatus.OK, "update question success.", null);
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ApiResponse deleteQuestion( @PathVariable Long id) {
         service.delete(id);
-        return new ApiResponse(HttpStatus.OK.toString(), "delete question success.", null);
+        return new ApiResponse(HttpStatus.OK, "delete question success.", null);
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/recommend")

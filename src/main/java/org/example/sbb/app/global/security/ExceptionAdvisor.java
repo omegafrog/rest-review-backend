@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionAdvisor {
     @ExceptionHandler(PersistenceException.class)
     public ApiResponse persistenceException(PersistenceException e){
-        return new ApiResponse(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), null);
+        return new ApiResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
     }
 }

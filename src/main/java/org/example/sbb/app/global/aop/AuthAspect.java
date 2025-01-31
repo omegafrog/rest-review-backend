@@ -5,7 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.example.sbb.app.domain.question.question.QuestionService;
+import org.example.sbb.app.domain.question.question.service.QuestionService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,10 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthAspect {
 
-    @Pointcut("execution(* org.example.sbb.app.domain.question.question.QuestionService.modify(..)) ||" +
-            "execution(* org.example.sbb.app.domain.question.question.QuestionService.writeQuestion(..))||" +
-            "execution(* org.example.sbb.app.domain.question.question.QuestionService.delete(..))||" +
-            "execution(* org.example.sbb.app.domain.question.question.QuestionService.recommend())")
+    @Pointcut("execution(* org.example.sbb.app.domain.question.question.service.QuestionService.modify(..)) ||" +
+            "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.writeQuestion(..))||" +
+            "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.delete(..))||" +
+            "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.recommend())||" +
+            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.prepareAnswerForm(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.modify(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.delete(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.recommend(..))")
     public void needAuthService(){}
 
     @Around("needAuthService()")

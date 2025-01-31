@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
 import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
 import org.example.sbb.app.domain.question.answer.dto.AnswerListDto;
@@ -39,6 +40,9 @@ public class AnswerService {
     private final QueryDslAnswerRepository queryDslAnswerRepository;
     private final QuestionService questionService;
     private final UserService userService;
+   
+    @Setter
+    private String userId;
 
     public AnswerDto writeAnswer(Long questionId, String content) {
         // TODO : service layer에서는 dto를 리턴하는데, 다른 도메인의 서비스에서 엔티티 객체 자체가 필요한 경우가 있다. 이 경우 어떻게하는가?
@@ -58,37 +62,37 @@ public class AnswerService {
         return queryDslAnswerRepository.findAllByQuestionId(questionId, pageable, sortOption).map(AnswerDto::of);
     }
 
-    public void prepareAnswerForm(Long answerId, AnswerForm form, Authentication auth) {
+    public void prepareAnswerForm(Long answerId, AnswerForm form) {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException(answerId + "인 답변이 없습니다."));
 
-        if(!isAuthor(auth, answer))
+        if(!isAuthor(answer))
             throw new BadCredentialsException("자신의 글이 아닙니다.");
 
         form.setContent(answer.getContent());
     }
 
-    public AnswerDto modify(Long answerId, @NotEmpty @Size( max = 500) String content, Authentication auth) {
+    public AnswerDto modify(Long answerId, @NotEmpty @Size( max = 500) String content) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
-        if(isAuthor(auth, answer))
+        if(isAuthor( answer))
             throw new BadCredentialsException("자신의 글이 아닙니다.");
 
         return AnswerDto.of(answer.modify(content));
     }
 
-    public void delete(Long answerId, Authentication auth) {
+    public void delete(Long answerId) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
-        if(isAuthor(auth, answer))
+        if(isAuthor( answer))
             throw new BadCredentialsException("자신의 글이 아닙니다.");
         answerRepository.deleteById(answerId);
     }
 
 
-    public AnswerDto recommend(Long answerId, Authentication auth) {
+    public AnswerDto recommend(Long answerId) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(EntityNotFoundException::new);
-        SiteUser voter = userService.findUserById(getUsername(auth));
+        SiteUser voter = userService.findUserById(userId);
 
-        if(isAuthor(auth, answer))
+        if(isAuthor(answer))
             throw new RuntimeException("자신의 글을 추천할 수 없습니다.");
 
         AnswerVoter relation = answer.vote(voter);
@@ -96,8 +100,8 @@ public class AnswerService {
         return AnswerDto.of(answer);
     }
 
-    private static boolean isAuthor(Authentication auth, Answer answer) {
-        return !answer.getAuthor().getId().equals(((User) auth.getPrincipal()).getUsername());
+    private boolean isAuthor(Answer answer) {
+        return !answer.getAuthor().getId().equals(userId);
     }
 
     private static String getUsername(Authentication auth) {
