@@ -1,7 +1,8 @@
-package org.example.sbb.app.domain.question.question;
+package org.example.sbb.app.domain.question.question.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.repository.QuestionH2Repository;
 import org.springframework.stereotype.Service;
 

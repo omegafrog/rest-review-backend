@@ -5,7 +5,7 @@ import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.comment.CommentH2Repository;
 import org.example.sbb.app.domain.comment.dto.CommentForm;
 import org.example.sbb.app.domain.question.answer.Answer;
-import org.example.sbb.app.domain.question.answer.AnswerH2Repository;
+import org.example.sbb.app.domain.question.answer.repository.AnswerH2Repository;
 import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.user.SiteUser;

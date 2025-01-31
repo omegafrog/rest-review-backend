@@ -1,9 +1,12 @@
-package org.example.sbb.app.domain.question.answer;
+package org.example.sbb.app.domain.question.answer.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.question.answer.Answer;
+import org.example.sbb.app.domain.question.answer.QAnswer;
+import org.example.sbb.app.domain.question.answer.SortOption;
 import org.example.sbb.app.domain.question.recommend.QAnswerVoter;
 import org.example.sbb.app.domain.user.QSiteUser;
 import org.springframework.data.domain.Page;

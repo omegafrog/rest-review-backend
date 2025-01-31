@@ -1,4 +1,4 @@
-package org.example.sbb.app.domain.question.question;
+package org.example.sbb.app.domain.question.question.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.*;
@@ -8,9 +8,10 @@ import lombok.Setter;
 import org.example.sbb.app.domain.comment.CommentReadService;
 import org.example.sbb.app.domain.comment.dto.CommentDto;
 import org.example.sbb.app.domain.question.answer.Answer;
-import org.example.sbb.app.domain.question.answer.QueryDslAnswerRepository;
 import org.example.sbb.app.domain.question.answer.SortOption;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
+import org.example.sbb.app.domain.question.answer.repository.QueryDslAnswerRepository;
+import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionListDto;
 import org.example.sbb.app.domain.question.question.repository.QueryDslQuestionH2Repository;

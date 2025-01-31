@@ -7,7 +7,7 @@ import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
 import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
 import org.example.sbb.app.domain.question.answer.dto.AnswerListDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
-import org.example.sbb.app.domain.question.question.QuestionService;
+import org.example.sbb.app.domain.question.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
