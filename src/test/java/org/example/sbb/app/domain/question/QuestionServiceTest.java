@@ -1,9 +1,9 @@
 package org.example.sbb.app.domain.question;
 
 import org.assertj.core.api.Assertions;
-import org.example.sbb.app.domain.question.question.dto.QuestionListDto;
 import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.QuestionService;
+import org.example.sbb.app.domain.question.question.dto.QuestionListDto;
 import org.example.sbb.app.domain.question.question.repository.QuestionH2Repository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
@@ -74,7 +74,7 @@ class QuestionServiceTest {
 
         // mocking questionService.writeQuestion
 
-        questionService.writeQuestion("sub", "content", auth);
+        questionService.writeQuestion("sub", "content");
 
         // mocking questionService.getQuestionPage(keyword, pageable)
         Pageable questionListPageable = PageRequest.of(0, 5);

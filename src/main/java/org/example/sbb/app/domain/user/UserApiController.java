@@ -2,7 +2,10 @@ package org.example.sbb.app.domain.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.sbb.app.domain.user.dto.*;
+import org.example.sbb.app.domain.user.dto.CreateUserForm;
+import org.example.sbb.app.domain.user.dto.RecoveryForm;
+import org.example.sbb.app.domain.user.dto.ResetPasswordForm;
+import org.example.sbb.app.domain.user.dto.SiteUserInfoDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,13 +32,6 @@ public class UserApiController {
         return "auth/success";
     }
 
-    @GetMapping("/login")
-    public String loginPage(@ModelAttribute(name = "form") LoginUserForm form,
-                            @RequestParam(name = "error", required = false) String error, Model model) {
-        if(error!=null)
-            model.addAttribute("error", error);
-        return "auth/login";
-    }
 
     @GetMapping("/recovery")
     public String recoveryPasswordPage(@ModelAttribute(name="form") RecoveryForm form,

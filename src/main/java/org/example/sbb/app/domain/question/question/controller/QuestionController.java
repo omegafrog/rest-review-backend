@@ -1,4 +1,4 @@
-package org.example.sbb.app.domain.question.question;
+package org.example.sbb.app.domain.question.question.controller;
 
 
 import jakarta.validation.Valid;
@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.question.answer.SortOption;
 import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
+import org.example.sbb.app.domain.question.question.QuestionService;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionForm;
 import org.example.sbb.app.domain.question.question.dto.QuestionListDto;
@@ -75,7 +76,7 @@ public class QuestionController {
         if(bindingResult.hasErrors()) {
             return "question/question_write";
         }
-        service.writeQuestion(form.getSubject(), form.getContent(), auth);
+        service.writeQuestion(form.getSubject(), form.getContent());
         return "redirect:write/confirm";
     }
 
@@ -99,7 +100,7 @@ public class QuestionController {
     @PostMapping("/{id}/modify")
     public String modifyQuestion(@Valid @ModelAttribute(name="form") QuestionForm form, @PathVariable Long id) {
         Authentication auth = getAuthentication();
-        service.modify(id, form.getSubject(), form.getContent(), auth);
+        service.modify(id, form.getSubject(), form.getContent());
         return "redirect:/sbb/questions/"+id;
     }
 
@@ -107,14 +108,14 @@ public class QuestionController {
     @GetMapping("/{id}/delete")
     public String deleteQuestion( @PathVariable Long id) {
         Authentication auth = getAuthentication();
-        service.delete(id, auth);
+        service.delete(id);
         return "redirect:/sbb/questions";
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/recommend")
     public String recommendQuestion( @PathVariable Long id) {
         Authentication auth = getAuthentication();
-        service.recommend(id, auth);
+        service.recommend(id);
         return "redirect:/sbb/questions/"+id;
     }
 }

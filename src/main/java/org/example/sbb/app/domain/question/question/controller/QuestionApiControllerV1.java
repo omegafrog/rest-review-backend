@@ -1,21 +1,19 @@
-package org.example.sbb.app.domain.question.question;
+package org.example.sbb.app.domain.question.question.controller;
 
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.question.answer.SortOption;
+import org.example.sbb.app.domain.question.question.QuestionService;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.dto.QuestionForm;
-import org.example.sbb.app.global.security.ApiResponse;
+import org.example.sbb.app.global.ApiResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,47 +51,32 @@ public class QuestionApiControllerV1 {
         return new ApiResponse(HttpStatus.OK.toString(), "get question success.", dto);
     }
 
-//    @GetMapping("/write")
-//    public String writeQuestionPage(@RequestBody QuestionForm form) {
-//        return "question/question_write";
-//    }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("")
-    public ApiResponse writeQuestion(@Valid @RequestBody QuestionForm form, BindingResult bindingResult,
-                                     HttpServletResponse response) {
-        Authentication auth = getAuthentication();
+    public ApiResponse writeQuestion(@Valid @RequestBody QuestionForm form, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ApiResponse(HttpStatus.BAD_REQUEST.toString(), "write question failed.",bindingResult);
         }
-        service.writeQuestion(form.getSubject(), form.getContent(), auth);
+        service.writeQuestion(form.getSubject(), form.getContent());
         return new ApiResponse(HttpStatus.OK.toString(),"write question success.", "write question successful");
-    }
-
-    private static Authentication getAuthentication() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth;
     }
 
     @PatchMapping("/{id}")
     public ApiResponse modifyQuestion(@Valid @RequestBody QuestionForm form, @PathVariable Long id) {
-        Authentication auth = getAuthentication();
-        service.modify(id, form.getSubject(), form.getContent(), auth);
+        service.modify(id, form.getSubject(), form.getContent());
         return new ApiResponse(HttpStatus.OK.toString(), "update question success.", null);
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ApiResponse deleteQuestion( @PathVariable Long id) {
-        Authentication auth = getAuthentication();
-        service.delete(id, auth);
+        service.delete(id);
         return new ApiResponse(HttpStatus.OK.toString(), "delete question success.", null);
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/recommend")
     public String recommendQuestion( @PathVariable Long id) {
-        Authentication auth = getAuthentication();
-        service.recommend(id, auth);
+        service.recommend(id);
         return "redirect:/sbb/questions/"+id;
     }
 }

@@ -1,6 +1,7 @@
 package org.example.sbb.app.global.security;
 
 import jakarta.persistence.PersistenceException;
+import org.example.sbb.app.global.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

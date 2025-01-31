@@ -68,13 +68,13 @@ public class QuestionService {
         SortOption option = SortOption.of("time");
         return getQuestionInfo(id, option, answerPageable, commentPageable);
     }
-    public void writeQuestion(String subject, String content, Authentication auth) {
-        SiteUser author = userService.findUserById(((User) auth.getPrincipal()).getUsername());
+    public void writeQuestion(String subject, String content) {
+        SiteUser author = userService.findUserById(userId);
         Question question = new Question(subject, content, author);
         repository.save(question);
     }
 
-    public void modify(Long id, String updatedSubject, String updatedContent, Authentication auth) {
+    public void modify(Long id, String updatedSubject, String updatedContent) {
         Question question = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         question.update(updatedSubject, updatedContent);
         if (!question.getAuthor().getId().equals(userId))
@@ -88,19 +88,19 @@ public class QuestionService {
             throw new AccessDeniedException("Login needed.");
     }
 
-    public void delete(Long id, Authentication auth) {
+    public void delete(Long id) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        if (!question.getAuthor().getId().equals(getId(auth)))
+        if (!question.getAuthor().getId().equals(userId))
             throw new UsernameNotFoundException(question.getAuthor().getId() + "인 유저를 찾을 수 없습니다.");
 
         repository.deleteById(id);
     }
 
-    public void recommend(Long id, Authentication auth) {
+    public void recommend(Long id) {
         Question question = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        SiteUser voter = userService.findUserById(((User) auth.getPrincipal()).getUsername());
+        SiteUser voter = userService.findUserById(userId);
 
         if (question.getAuthor().equals(voter))
             throw new RuntimeException("자신의 글은 추천할 수 없습니다.");

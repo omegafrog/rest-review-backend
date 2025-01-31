@@ -1,4 +1,4 @@
-package org.example.sbb.app.global.security;
+package org.example.sbb.app.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

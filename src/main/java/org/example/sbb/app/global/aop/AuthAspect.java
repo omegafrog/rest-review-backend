@@ -16,10 +16,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthAspect {
 
-    @Pointcut("execution(* org.example.sbb.app.domain.question.question.QuestionService.modify(..))")
-    public void modify(){}
+    @Pointcut("execution(* org.example.sbb.app.domain.question.question.QuestionService.modify(..)) ||" +
+            "execution(* org.example.sbb.app.domain.question.question.QuestionService.writeQuestion(..))||" +
+            "execution(* org.example.sbb.app.domain.question.question.QuestionService.delete(..))||" +
+            "execution(* org.example.sbb.app.domain.question.question.QuestionService.recommend())")
+    public void needAuthService(){}
 
-    @Around("modify()")
+    @Around("needAuthService()")
     public Object aroundModify(ProceedingJoinPoint joinPoint) throws Throwable {
 
         QuestionService target = (QuestionService) joinPoint.getTarget();
