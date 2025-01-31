@@ -1,10 +1,11 @@
-package org.example.sbb.app.domain.comment;
+package org.example.sbb.app.domain.comment.controller;
 
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.comment.dto.CommentForm;
+import org.example.sbb.app.domain.comment.service.CommentService;
 import org.example.sbb.app.domain.question.question.service.QuestionReadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

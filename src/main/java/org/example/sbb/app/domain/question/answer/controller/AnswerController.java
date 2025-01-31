@@ -1,4 +1,4 @@
-package org.example.sbb.app.domain.question.answer;
+package org.example.sbb.app.domain.question.answer.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
 import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
 import org.example.sbb.app.domain.question.answer.dto.AnswerListDto;
+import org.example.sbb.app.domain.question.answer.service.AnswerService;
 import org.example.sbb.app.domain.question.question.dto.QuestionDto;
 import org.example.sbb.app.domain.question.question.service.QuestionService;
 import org.springframework.data.domain.Page;

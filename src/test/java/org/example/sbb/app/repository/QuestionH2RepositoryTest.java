@@ -2,8 +2,8 @@ package org.example.sbb.app.repository;
 
 import org.assertj.core.api.Assertions;
 import org.example.sbb.app.domain.comment.Comment;
-import org.example.sbb.app.domain.comment.CommentH2Repository;
 import org.example.sbb.app.domain.comment.dto.CommentForm;
+import org.example.sbb.app.domain.comment.repository.CommentH2Repository;
 import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.question.answer.repository.AnswerH2Repository;
 import org.example.sbb.app.domain.question.question.Question;

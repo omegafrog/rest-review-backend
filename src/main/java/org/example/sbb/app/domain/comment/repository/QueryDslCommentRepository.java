@@ -1,8 +1,10 @@
-package org.example.sbb.app.domain.comment;
+package org.example.sbb.app.domain.comment.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.comment.Comment;
+import org.example.sbb.app.domain.comment.QComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

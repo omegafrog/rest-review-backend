@@ -20,10 +20,10 @@ public class AuthAspect {
             "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.writeQuestion(..))||" +
             "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.delete(..))||" +
             "execution(* org.example.sbb.app.domain.question.question.service.QuestionService.recommend())||" +
-            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.prepareAnswerForm(..))||" +
-            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.modify(..))||" +
-            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.delete(..))||" +
-            "execution(* org.example.sbb.app.domain.question.answer.AnswerService.recommend(..))")
+            "execution(* org.example.sbb.app.domain.question.answer.service.AnswerService.prepareAnswerForm(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.service.AnswerService.modify(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.service.AnswerService.delete(..))||" +
+            "execution(* org.example.sbb.app.domain.question.answer.service.AnswerService.recommend(..))")
     public void needAuthService(){}
 
     @Around("needAuthService()")

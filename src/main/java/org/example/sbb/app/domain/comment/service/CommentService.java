@@ -1,16 +1,15 @@
-package org.example.sbb.app.domain.comment;
+package org.example.sbb.app.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.sbb.app.domain.comment.Comment;
 import org.example.sbb.app.domain.comment.dto.CommentForm;
+import org.example.sbb.app.domain.comment.repository.CommentH2Repository;
 import org.example.sbb.app.domain.question.answer.Answer;
-import org.example.sbb.app.domain.question.answer.AnswerService;
+import org.example.sbb.app.domain.question.answer.service.AnswerService;
 import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.service.QuestionReadService;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,23 +21,22 @@ public class CommentService{
     private final QuestionReadService questionService;
     private final AnswerService answerService;
 
+    private String userId;
+
     public void writeComment(CommentForm form, String targetName, Long targetId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth!=null && auth.isAuthenticated() && auth.getPrincipal() instanceof User user){
-            SiteUser author= userService.findUserById(user.getUsername());
+        SiteUser author= userService.findUserById(userId);
 
-            Comment.CommentBuilder commentBuilder = switch (targetName) {
-                case "questions" -> writeToQuestion(targetId);
-                case "answers" -> writeToAnswer(targetId);
-                default -> null;
-            };
-            Comment comment = commentBuilder.
-                    content(form.getContent())
-                    .author(author)
-                    .build();
+        Comment.CommentBuilder commentBuilder = switch (targetName) {
+            case "questions" -> writeToQuestion(targetId);
+            case "answers" -> writeToAnswer(targetId);
+            default -> null;
+        };
+        Comment comment = commentBuilder.
+                content(form.getContent())
+                .author(author)
+                .build();
 
-            commentH2Repository.save(comment);
-        }
+        commentH2Repository.save(comment);
     }
 
     private Comment.CommentBuilder writeToAnswer(Long targetId) {

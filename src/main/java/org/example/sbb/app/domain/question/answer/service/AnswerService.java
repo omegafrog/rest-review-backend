@@ -1,4 +1,4 @@
-package org.example.sbb.app.domain.question.answer;
+package org.example.sbb.app.domain.question.answer.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.example.sbb.app.domain.question.answer.Answer;
+import org.example.sbb.app.domain.question.answer.SortOption;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
 import org.example.sbb.app.domain.question.answer.dto.AnswerForm;
 import org.example.sbb.app.domain.question.answer.dto.AnswerListDto;
