@@ -5,7 +5,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.example.sbb.app.domain.question.question.service.QuestionService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -29,7 +28,7 @@ public class AuthAspect {
     @Around("needAuthService()")
     public Object aroundModify(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        QuestionService target = (QuestionService) joinPoint.getTarget();
+        AbstractService target = (AbstractService) joinPoint.getTarget();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if( auth.getPrincipal() instanceof User user){

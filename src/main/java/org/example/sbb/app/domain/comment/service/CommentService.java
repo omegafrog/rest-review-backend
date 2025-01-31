@@ -10,18 +10,18 @@ import org.example.sbb.app.domain.question.question.Question;
 import org.example.sbb.app.domain.question.question.service.QuestionReadService;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
+import org.example.sbb.app.global.aop.AbstractService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService{
+public class CommentService extends AbstractService {
 
     private final CommentH2Repository commentH2Repository;
     private final UserService userService;
     private final QuestionReadService questionService;
     private final AnswerService answerService;
 
-    private String userId;
 
     public void writeComment(CommentForm form, String targetName, Long targetId) {
         SiteUser author= userService.findUserById(userId);

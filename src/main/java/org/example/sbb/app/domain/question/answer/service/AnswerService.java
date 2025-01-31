@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.example.sbb.app.domain.question.answer.Answer;
 import org.example.sbb.app.domain.question.answer.SortOption;
 import org.example.sbb.app.domain.question.answer.dto.AnswerDto;
@@ -19,6 +18,7 @@ import org.example.sbb.app.domain.question.recommend.AnswerVoter;
 import org.example.sbb.app.domain.question.recommend.AnswerVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
+import org.example.sbb.app.global.aop.AbstractService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,16 +35,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AnswerService {
+public class AnswerService extends AbstractService {
 
     private final AnswerH2Repository answerRepository;
     private final AnswerVoterRepository answerVoterRepository;
     private final QueryDslAnswerRepository queryDslAnswerRepository;
     private final QuestionService questionService;
     private final UserService userService;
-   
-    @Setter
-    private String userId;
 
     public AnswerDto writeAnswer(Long questionId, String content) {
         // TODO : service layer에서는 dto를 리턴하는데, 다른 도메인의 서비스에서 엔티티 객체 자체가 필요한 경우가 있다. 이 경우 어떻게하는가?

@@ -20,6 +20,7 @@ import org.example.sbb.app.domain.question.recommend.QuestionVoter;
 import org.example.sbb.app.domain.question.recommend.QuestionVoterRepository;
 import org.example.sbb.app.domain.user.SiteUser;
 import org.example.sbb.app.domain.user.UserService;
+import org.example.sbb.app.global.aop.AbstractService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class QuestionService {
+public class QuestionService extends AbstractService {
 
     private final QuestionH2Repository repository;
     private final QuestionVoterRepository questionVoterRepository;
