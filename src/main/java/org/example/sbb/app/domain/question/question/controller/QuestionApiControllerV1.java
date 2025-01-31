@@ -73,11 +73,12 @@ public class QuestionApiControllerV1 {
         service.delete(id);
         return new ApiResponse(HttpStatus.OK, "delete question success.", null);
     }
+
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/recommend")
-    public String recommendQuestion( @PathVariable Long id) {
+    @PatchMapping("/{id}")
+    public ApiResponse recommendQuestion( @PathVariable Long id) {
         service.recommend(id);
-        return "redirect:/sbb/questions/"+id;
+        return ApiResponse.ok("recommend question success.", null);
     }
 }
 
